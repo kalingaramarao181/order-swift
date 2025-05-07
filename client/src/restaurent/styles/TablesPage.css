@@ -1,0 +1,74 @@
+.order-swift-tables-container {
+    padding: 30px;
+    background: #fff;
+  }
+  
+  .order-swift-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #ff6f00;
+  }
+  
+  .order-swift-add-table-form {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .order-swift-add-table-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 150px;
+  }
+  
+  .order-swift-add-table-form button {
+    background-color: #ff6f00;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .order-swift-table-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+  }
+  
+  .order-swift-table-card {
+    background: #fff8f1;
+    border: 2px solid #ff6f00;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .order-swift-table-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .order-swift-table-card.booked {
+    background-color: #ffe0b2;
+  }
+  
+  .order-swift-table-card button {
+    margin-top: 10px;
+    background-color: #ff6f00;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .order-swift-selected-table {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff8f1;
+    border-left: 4px solid #ff6f00;
+  }
+  

@@ -1,0 +1,94 @@
+.os-billing-container {
+    padding: 30px;
+    background-color: #fff8f2;
+  }
+  
+  .os-page-name-title {
+    font-size: 24px;
+    color: #fc8019;
+    margin-bottom: 20px;
+  }
+  
+  .os-billing-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .os-billing-add-item-btn{
+    background-color: #fc8019;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  .os-billing-add-item-link{
+    margin-left: auto;
+  }
+
+  .os-billing-controls input,
+  .os-billing-controls select {
+    padding: 8px 12px;
+    border: 1px solid #ffcaa3;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .os-billing-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .os-billing-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(252, 128, 25, 0.2);
+  }
+  
+  .os-billing-table th,
+  .os-billing-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ffe5d1;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .os-billing-table thead {
+    background-color: #fc8019;
+    color: white;
+  }
+  
+  .status-badge {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+  
+  .status-badge.paid {
+    background-color: #d4edda;
+    color: #2e7d32;
+  }
+  
+  .status-badge.unpaid {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .status-badge.refunded {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  

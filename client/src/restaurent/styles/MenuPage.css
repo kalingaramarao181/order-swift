@@ -1,0 +1,92 @@
+.os-menu-container {
+    padding: 30px;
+    background-color: #fff8f2;
+    min-height: 100vh;
+  }
+  
+  .os-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .os-menu-title {
+    font-size: 24px;
+    color: #fc8019;
+  }
+  
+  .os-add-item-btn {
+    background-color: #fc8019;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .os-add-item-btn:hover {
+    background-color: #e5720f;
+  }
+  
+  .os-menu-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(252, 128, 25, 0.1);
+  }
+  
+  .os-menu-table th,
+  .os-menu-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ffead9;
+  }
+  
+  .os-menu-table th {
+    background-color: #ffe4cc;
+    color: #333;
+  }
+
+  .os-menu-item-image{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .os-menu-item{
+    display: flex;
+    align-items: center;
+  }
+  
+  .os-edit-btn,
+  .os-delete-btn {
+    margin-right: 8px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  
+  .os-edit-btn {
+    background-color: #ffbb66;
+    color: #fff;
+  }
+  
+  .os-edit-btn:hover {
+    background-color: #ffa540;
+  }
+  
+  .os-delete-btn {
+    background-color: #ff5e3a;
+    color: #fff;
+  }
+  
+  .os-delete-btn:hover {
+    background-color: #e5441e;
+  }
+  
