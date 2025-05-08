@@ -51,11 +51,12 @@ const Menu = {
             );
         });
     },
-    updateMenuItem: (id, name, description, price, category, image) => {
+    updateMenuItem: (id, itemData) => {
+        const { name, description, price, category, foodType } = itemData;
         return new Promise((resolve, reject) => {
             db.query(
-                'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = ? WHERE id = ?',
-                [name, description, price, category, image, id],
+                'UPDATE menu_items SET name = ?, description = ?, price = ?, category_id = ?, food_type = ? WHERE id = ?',
+                [name, description, price, category, foodType, id],
                 (err, result) => {
                     if (err) {
                         reject(err);

@@ -4,6 +4,7 @@ import Home from "./pages/home";
 import Dashboard from "./restaurent";
 import Secure from "./components/Secure";
 import Billing from "./forms/billing";
+import RestaurantDetails from "./components/RestrentDetails";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/billing" element={<Billing />} />
+      <Route path="/restaurant/:restaurantId" element={<RestaurantDetails />} />
       <Route element={<Secure />}>
           <Route path="/dashboard/*" element={<Dashboard />} />
         </Route>

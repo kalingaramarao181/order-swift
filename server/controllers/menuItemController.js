@@ -53,13 +53,11 @@ const getMenuItemById = async (req, res) => {
 
 const updateMenuItem = (req, res) => {
     const { id } = req.params;
-    const { name, description, price, image } = req.body;
-    if (!name || !description || !price || !image) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
+    const { name, description, price, category, foodType } = req.body;
+    
 
     try {
-        const menuItem = Menu.updateMenuItem(id, { name, description, price, image });
+        const menuItem = Menu.updateMenuItem(id, {  name, description, price, category, foodType });
         if (!menuItem) {
             return res.status(404).json({ message: 'Menu item not found' });
         }

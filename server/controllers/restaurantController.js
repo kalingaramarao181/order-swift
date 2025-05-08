@@ -1,4 +1,6 @@
+const Menu = require('../models/menuItemModel');
 const Restaurant = require('../models/restaurantModel');
+const Tables = require('../models/tableModel');
 
 const createRestaurantProfile = async (req, res) => {
     const { ownerId, name, description, address } = req.body;
@@ -70,6 +72,75 @@ const getRestaurantImagesById = async (req, res) => {
     }
 };
 
+
+const getAllRestaurants = async (req, res) => {
+    try {
+        const restaurants = await Restaurant.getAllRestaurants();
+        const grouped = {};
+        restaurants.forEach(row => {
+            const id = row.restaurant_id;
+            if (!grouped[id]) {
+              grouped[id] = {
+                id,
+                name: row.name,
+                description: row.description,
+                location: row.location,
+                logo: row.logo,
+                images: []
+              };
+            }
+            if (row.restaurant_image) {
+              grouped[id].images.push(row.restaurant_image);
+            }
+        });
+        const formattedRestaurants = Object.values(grouped).map(rest => ({
+            ...rest,
+            image: rest.images[0] || null, 
+            images: undefined 
+          }));
+        res.status(200).json(Object.values(formattedRestaurants));
+    } catch (error) {
+        console.error("Error fetching all restaurants:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+const getRestaurantDetails = async (req, res) => {
+    const { restaurantId } = req.params;
+
+  try {
+    const restaurant = await Restaurant.getRestaurantProfileByRestaurantId(restaurantId);
+    
+    if (!restaurant) return res.status(404).json({ message: "Restaurant not found" });
+
+    const images = await Restaurant.getRestaurantImagesById(restaurantId);
+    const foodItems = await Menu.getMenuItemById(restaurantId);
+    const tables = await Tables.getTablesByRestaurantId(restaurantId);
+
+    res.status(200).json({
+      name: restaurant[0].name,
+      logo: restaurant[0].image_url,
+      description: restaurant[0].description,
+      images: images.map((img) => img.image_url),
+      tables: tables.map((table) => ({
+        tableNumber: table.table_number,
+        seats: table.seats,
+        isAvailable: table.is_available,
+        tableId: table.id,
+      })),
+      foodItems: foodItems.map((item) => ({
+        name: item.name,
+        price: item.price,
+        description: item.description,
+        image: item.image,
+      })),
+    });
+  } catch (error) {
+    console.error("Error in getRestaurantDetails:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const getRestaurantProfileById = async (req, res) => {
     const { ownerId } = req.params;
     try {
@@ -94,4 +165,6 @@ module.exports = {
     getRestaurantProfileById,
     uploadRestaurantImages,
     getRestaurantImagesById,
+    getRestaurantDetails,
+    getAllRestaurants
 };

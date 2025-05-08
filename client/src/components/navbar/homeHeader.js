@@ -4,9 +4,8 @@ import LoginForm from "../../forms/loginForm";
 import { MdClose } from "react-icons/md";
 import PasswordUpdate from "../../forms/PasswordUpdateForm";
 import RegisterForm from "../../forms/registerForm";
-import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const HomeHeader = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [userRole, setUserRole] = useState("");
   const [isShowUpdatePasswordForm, setIsShowUpdatePasswordForm] =
@@ -34,7 +33,7 @@ const Navbar = () => {
   return (
     <header className="swiggy-header">
       <div className="swiggy-logo">
-        <img src="" className="" alt="" /><Link className="header-nav-link" to="/"> OrderSwift</Link>
+        <img src="" className="" alt="" /> OrderSwift
       </div>
       <nav className="swiggy-nav">
         <a href="#order">Sign in as a</a>
@@ -108,4 +107,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default HomeHeader;

@@ -9,24 +9,22 @@ const Secure = () => {
   if (token) {
     try {
       const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000; // in seconds
+      const currentTime = Date.now() / 1000;
 
-      // Check if token is expired
       if (decodedToken.exp < currentTime) {
         alert("Session expired. Please log in again.");
         Cookies.remove("jwtToken");
         return <Navigate to="/" replace />;
       }
 
-      return <Outlet />; // Allow access to protected routes
+      return <Outlet />;
     } catch (error) {
       console.error("Invalid token:", error);
-      Cookies.remove("jwtToken"); // Remove invalid token
+      Cookies.remove("jwtToken");
       return <Navigate to="/" replace />;
     }
   }
 
-  // If no token, redirect to login page
   return <Navigate to="/" replace />;
 };
 

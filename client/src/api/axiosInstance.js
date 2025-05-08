@@ -13,8 +13,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const token = Cookies.get("jwtToken");
 
-    // Allow these public routes without token
-    const publicRoutes = ["/login", "/register", "/send-otp", "/verify-otp"];
+    const publicRoutes = ["/login", "/register", "/send-otp", "/verify-otp", "/restaurans/all", "/restaurant-profile/images"];
 
     if (token && !publicRoutes.includes(config.url)) {
       config.headers["Authorization"] = `Bearer ${token}`;

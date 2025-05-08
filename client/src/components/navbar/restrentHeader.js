@@ -4,7 +4,7 @@ import { useState } from "react";
 import LogoutConfirm from "../LogoutConfirm";
 
 
-const Header = () => {
+const RestaurantHeader = () => {
     const [openLogoutConfirm, setOpenLogoutConfirm] = useState(false);
   return (
     <header className="os-dashboard-header">
@@ -24,4 +24,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default RestaurantHeader;

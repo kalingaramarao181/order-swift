@@ -52,8 +52,8 @@ router.get('/menu-items/search/:searchTerm', protect, getMenuItemsBySearch);
 router.get('/menu-items/price-range/:minPrice/:maxPrice', protect, getMenuItemsByPriceRange);
 router.get('/menu-items/food-type/:foodType', protect, getMenuItemsByFoodType);
 router.get('/menu-items/:id', protect, getMenuItemById);
-router.put('/menu-items/:id', protect, authorize(['super_admin', 'enterprise_admin']), updateMenuItem);
-router.delete('/menu-items/:id', protect, authorize(['super_admin', 'enterprise_admin']), deleteMenuItem);
+router.put('/menu-items/:id', protect, updateMenuItem);
+router.delete('/menu-items/:id', protect, deleteMenuItem);
 router.get('/categories', getCategorys);
 
 module.exports = router;

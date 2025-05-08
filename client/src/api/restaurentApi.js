@@ -8,6 +8,18 @@ export const addRestaurantProfile = async (formData) => {
   return response.data;
 };
 
+export const getRestaurants = async () => {
+  try {
+    const response = await axiosInstance.get("/restaurans/all");
+    console.log(response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching restaurant profiles", error);
+    throw error;
+  }
+}
+
 export const getRestaurantProfile = async () => {
   try {
     const response = await axiosInstance.get("/restaurant-profile");
@@ -47,6 +59,16 @@ export const addRestaurantImages = async (formData) => {
     return response.data;
   } catch (error) {
     console.error("Error adding restaurant images", error);
+    throw error;
+  }
+}
+
+export const getRestaurantDetails = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/restaurant-details/${restaurantId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching restaurant details", error);
     throw error;
   }
 }

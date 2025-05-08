@@ -1,6 +1,4 @@
 const User = require("../models/userModel");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 
@@ -48,8 +46,6 @@ const getUsersByRole = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-  console.log("User ID:", req.params.userId);
-  
   try {
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ message: "User not found" });

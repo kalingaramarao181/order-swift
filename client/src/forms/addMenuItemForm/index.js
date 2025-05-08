@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { addMenuItem } from "../../api/menuItemApi";
+import { addMenuItem, updateMenuItem } from "../../api/menuItemApi";
 import { getCategouries } from "../../api/menuItemApi";
 import "./index.css";
 import { getCookiesData } from "../../utils/cookiesData";
 
-const AddMenuItemForm = ({ onClose }) => {
+const AddMenuItemForm = ({ onClose, editData }) => {
   const [file, setFile] = useState(null);
   const [itemName, setItemName] = useState("");
   const [price, setPrice] = useState("");
@@ -25,6 +25,16 @@ const AddMenuItemForm = ({ onClose }) => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    if (editData) {
+      setItemName(editData.name);
+      setPrice(editData.price);
+      setCategory(editData.category_id);
+      setFoodType(editData.food_type);
+      setDescription(editData.description);
+    }
+  }, [editData]);
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -40,15 +50,16 @@ const AddMenuItemForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!itemName || !price || !category || !foodType || !file) {
+    console.log(itemName, price, category, foodType, description, file);
+    
+  
+    if (!itemName || !price || !category || !foodType) {
       alert("All fields are required!");
       return;
     }
-
+  
     const restaurantId = getCookiesData().userId;
-    console.log("Restaurant ID:", restaurantId);
-
+  
     const formData = new FormData();
     formData.append("restaurantId", restaurantId);
     formData.append("name", itemName);
@@ -56,16 +67,20 @@ const AddMenuItemForm = ({ onClose }) => {
     formData.append("category", category);
     formData.append("foodType", foodType);
     formData.append("description", description);
-    formData.append("image", file);
-
+    if (file) formData.append("image", file);
+  
     try {
-      const response = await addMenuItem(formData);
-      alert("Menu item added successfully!");
-      console.log("Response:", response);
+      if (editData) {
+        await updateMenuItem(editData.id, formData);
+        alert("Menu item updated successfully!");
+      } else {
+        await addMenuItem(formData);
+        alert("Menu item added successfully!");
+      }
       onClose();
     } catch (error) {
-      console.error("Error uploading menu item", error);
-      alert("Failed to add menu item.");
+      console.error("Error submitting menu item", error);
+      alert("Failed to submit menu item.");
     }
   };
 
@@ -84,7 +99,7 @@ const AddMenuItemForm = ({ onClose }) => {
           accept=".jpg,.png,.jpeg"
           className="order-file-input"
           id="file-input"
-          style={{ display: "none" }} // Hide the actual file input
+          style={{ display: "none" }}
         />
 
         {file ? (

@@ -54,6 +54,11 @@
 
   }
 
+  .header-nav-link{
+    text-decoration: none;
+    color: #f8f8f8;
+  }
+
   .order-nav-link{
     color: inherit;
   }

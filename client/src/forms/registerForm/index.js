@@ -21,6 +21,8 @@ const RegisterForm = ({ isPopupOpen, closePopup, role }) => {
     return true;
   };
 
+  const roleId = role === "Restaurant" ? 2 : 3;
+
   const validatePasswords = () => {
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match.");
@@ -48,7 +50,7 @@ const RegisterForm = ({ isPopupOpen, closePopup, role }) => {
         phone: formData.phone,
         password: formData.password,
         confirmPassword: formData.confirmPassword,
-        role: 3,
+        role: roleId,
       };
 
       const response = await sendOtp(payload);

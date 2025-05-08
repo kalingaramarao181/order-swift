@@ -3,25 +3,51 @@ import "../styles/MenuPage.css";
 import { MdClose } from "react-icons/md";
 import AddMenuItemForm from "../../forms/addMenuItemForm";
 import { getCookiesData } from "../../utils/cookiesData";
-import { getMenuItemById } from "../../api/menuItemApi";
+import { getMenuItemById, deleteMenuItem } from "../../api/menuItemApi";
 import { baseUrl } from "../../config/env";
 
 const ManageMenu = () => {
   const [isAddMenuItemOpen, setIsAddMenuItemOpen] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
+  const [editItemData, setEditItemData] = useState(null); 
+
+  const fetchMenuItems = async () => {
+    try {
+      const restaurantId = getCookiesData().userId;
+      const data = await getMenuItemById(restaurantId);
+      setMenuItems(data);
+    } catch (error) {
+      console.error("Error fetching menu items", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const restaurantId = getCookiesData().userId;
-        const data = await getMenuItemById(restaurantId);
-        setMenuItems(data);
-      } catch (error) {
-        console.error("Error fetching menu items", error);
-      }
-    };
     fetchMenuItems();
   }, []);
+
+  const handleDelete = async (itemId) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      try {
+        await deleteMenuItem(itemId);
+        fetchMenuItems();
+      } catch (error) {
+        alert("Failed to delete item.");
+      }
+    }
+  };
+
+  const handleEdit = (item) => {
+    
+    setEditItemData(item);
+    setIsAddMenuItemOpen(true);
+  };
+
+
+  const handleCloseForm = () => {
+    setIsAddMenuItemOpen(false);
+    setEditItemData(null);
+    fetchMenuItems();
+  };
 
   return (
     <div className="os-menu-container">
@@ -48,31 +74,39 @@ const ManageMenu = () => {
         <tbody>
           {menuItems.map((item) => (
             <tr key={item.id}>
-              <td className="os-menu-item"><img src={`${baseUrl}${item.image}`} alt={item.name} className="os-menu-item-image"/>{item.name}</td>
+              <td className="os-menu-item">
+                <img
+                  src={`${baseUrl}${item.image}`}
+                  alt={item.name}
+                  className="os-menu-item-image"
+                />
+                {item.name}
+              </td>
               <td>{item.id}</td>
-              <td>${item.price.toFixed(2)}</td>
+              <td>₹{item.price.toFixed(2)}</td>
               <td>{item.available ? "Yes" : "No"}</td>
               <td>
-                <button className="os-edit-btn">Edit</button>
-                <button className="os-delete-btn">Delete</button>
+                <button className="os-edit-btn" onClick={() => handleEdit(item)}>Edit</button>
+                <button className="os-delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
       {isAddMenuItemOpen && (
         <div className="login-popup-overlay">
           <div className="login-popup">
             <button
               className="order-login-close-button"
-              onClick={() => setIsAddMenuItemOpen(false)}
+              onClick={handleCloseForm}
             >
               <MdClose />
             </button>
             <div className="order-login-page">
               <AddMenuItemForm
-                fullName={"Ramarao"}
-                onClose={() => setIsAddMenuItemOpen(false)}
+                onClose={handleCloseForm}
+                editData={editItemData}
               />
             </div>
           </div>

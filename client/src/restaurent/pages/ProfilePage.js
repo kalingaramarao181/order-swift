@@ -13,7 +13,7 @@ const ProfilePage = () => {
   const [isOpenProfileDetails, setIsOpenProfileDetails] = useState(false);
   const [isOpenImageForm, setIsOpenImageForm] = useState(false);
   const [restaurantImages, setRestaurantImages] = useState([]);
-  // const [completeProfileButton, setCompleteProfileButton] = useState(false);
+  const [completeProfileButton, setCompleteProfileButton] = useState(false);
 
   const [userData, setUserData] = useState({
     email: "",
@@ -35,9 +35,11 @@ const ProfilePage = () => {
         const restaurantData = await getRestaurantProfileById(ownerId);
         const userDataRes = await getUserById(ownerId);
         const restaurantImagesRes = await getRestaurantImagesById(restaurantData[0]?.id);
+        if (restaurantData[0] !== undefined) {
+          setCompleteProfileButton(true);
+        }
 
         setRestaurantImages(restaurantImagesRes || []);
-        console.log("Restaurant Images:", restaurantImagesRes);
         
 
         setUserData({
@@ -113,12 +115,12 @@ const ProfilePage = () => {
 
       <div className="os-profile-header">
         <h2 className="os-page-title">{profile.name || "Restaurant Name"}</h2>
-        <button
+        {!completeProfileButton && <button
           className="os-edit-profile-btn"
           onClick={() => setIsOpenProfileDetails(true)}
         >
           Complete Profile
-        </button>
+        </button>}
       </div>
 
       <div className="os-profile-completion">

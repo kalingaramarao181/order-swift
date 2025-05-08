@@ -12,7 +12,6 @@ export const loginUser = async (loginDetails, navigate, setMessage) => {
       throw new Error("Invalid login response");
     }
     Cookies.set("jwtToken", token, { expires: 30 });
-    window.location.reload();
     return response.data;
   } catch (error) {
     if (error.response?.status === 401) {
