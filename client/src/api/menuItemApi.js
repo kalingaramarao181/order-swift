@@ -29,6 +29,16 @@ export const getMenuItemById = async (id) => {
   }
 };
 
+export const getBillMenuItems = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/menu-items/bill-menu-items/${restaurantId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching bill menu items", error);
+    throw error;
+  }
+}
+
 export const updateMenuItem = async (id, formData) => {
   try {
     const response = await axiosInstance.put(`/menu-items/${id}`, formData);

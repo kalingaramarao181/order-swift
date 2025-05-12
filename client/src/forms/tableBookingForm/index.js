@@ -3,6 +3,7 @@ import "./index.css";
 import { createTabelBooking } from "../../api/tableBookingApi";
 
 const TableBookingForm = ({ onClose, restaurantData, userId }) => {
+  
     
   const [tableId, setTableId] = useState("");
   const [bookingTime, setBookingTime] = useState("");
@@ -21,19 +22,21 @@ const TableBookingForm = ({ onClose, restaurantData, userId }) => {
         (table) => String(table.id) === String(tableId)
       );
       
-      if (numberOfPeople > selectedTable?.seats) {
+      if (parseInt(numberOfPeople) > selectedTable?.seats) {
         alert("Selected table does not have enough seats for the number of people.");
         return;
       }
 
     const bookingData = {
-      restaurant_id: restaurantData?.id,
-      table_id: tableId,
+      restaurant_id: restaurantData?.restaurantId,
+      table_id: parseInt(tableId),
       user_id: userId,
       booking_time: bookingTime,
-      number_of_people: numberOfPeople,
+      number_of_people: parseInt(numberOfPeople),
       special_request: specialRequest,
     };
+
+    
 
     try {
       const response = await createTabelBooking(bookingData);
@@ -60,8 +63,8 @@ const TableBookingForm = ({ onClose, restaurantData, userId }) => {
           >
             <option value="">-- Select Table --</option>
             {restaurantData?.tables?.map((table) => (
-              <option key={table.id} value={table.id}>
-                Table {table.table_number} ({table.seats} seats)
+              <option key={table.id} value={table.tableId}>
+                T{table.tableNumber} ({table.seats} seats) <span>{table.isAvailable ? "Available" : "Booked"}</span>
               </option>
             ))}
           </select>

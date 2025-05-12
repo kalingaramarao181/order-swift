@@ -12,7 +12,7 @@ const Bookings = {
             });
         });
     },
-    getBookingById: (id) => {
+    getBookingById: (id) => {   
         return new Promise((resolve, reject) => {
             db.query("SELECT * FROM bookings WHERE id = ?", [id], (err, result) => {
                 if (err) {
@@ -23,13 +23,15 @@ const Bookings = {
             });
         });
     },
-    createBooking: (customerId, restaurantId, date, time, numberOfPeople) => {
+    createBooking: (user_id, restaurant_id, table_id, booking_time, number_of_people, special_request) => {
+        console.log("user_id", user_id, restaurant_id, table_id, booking_time, number_of_people, special_request);
+        
         return new Promise((resolve, reject) => {
             const sql = `
-                INSERT INTO bookings (customer_id, restaurant_id, date, time, number_of_people)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO bookings (user_id, restaurant_id, table_id, booking_time, number_of_people, special_request, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             `;
-            db.query(sql, [customerId, restaurantId, date, time, numberOfPeople], (err, result) => {
+            db.query(sql, [user_id, restaurant_id, table_id, booking_time, number_of_people, special_request, "booked"], (err, result) => {
                 if (err) {
                     reject(err);
                 } else {

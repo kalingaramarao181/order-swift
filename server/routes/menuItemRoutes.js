@@ -13,7 +13,8 @@ const {
     getMenuItemsBySearch,
     getMenuItemsByPriceRange,
     getMenuItemsByFoodType,
-    getCategorys
+    getCategorys,
+    getBillMenuItems
 } = require('../controllers/menuItemController');
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
@@ -44,7 +45,8 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-router.post('/menu-items',upload.single('image'), createMenuItem); 
+router.post('/menu-items',protect, upload.single('image'), createMenuItem); 
+router.get('/menu-items/bill-menu-items/:restaurantId', protect, getBillMenuItems);
 router.get('/menu-items', protect, getMenuItems);
 router.get('/menu-items/category/:category', protect, getMenuItemsByCategory);
 router.get('/menu-items/category/:category/food-type/:foodType', protect, getMenuItemsByCategoryAndFoodType);

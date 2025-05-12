@@ -8,6 +8,8 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.8.4",
+    "downloadjs": "^1.4.7",
+    "html-to-image": "^1.11.13",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",

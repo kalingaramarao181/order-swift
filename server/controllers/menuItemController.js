@@ -17,6 +17,27 @@ const createMenuItem = async (req, res) => {
     }
   };
 
+  const getBillMenuItems = async (req, res) => {
+    const { restaurantId } = req.params;
+    try {
+      const menuItems = await Menu.getMenuItemById(restaurantId);
+  
+      const itemDatabase = {};
+      menuItems.forEach((item, index )=> {
+        itemDatabase[index] = {
+          name: item.name,
+          unit: 'PLATE',
+          rate: item.price
+        };
+      });
+  
+      res.status(200).json(itemDatabase);
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+      res.status(500).json({ message: 'Failed to fetch menu items' });
+    }
+  };
+
 const getMenuItems = (req, res) => {
     try {
         const menuItems = Menu.getMenuItems();
@@ -176,4 +197,5 @@ module.exports = {
     getMenuItemsBySearch,
     getMenuItemsByPriceRange,
     getCategorys,
+    getBillMenuItems,
 };

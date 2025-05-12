@@ -1,4 +1,5 @@
 const Bookings = require("../models/bookingModel");
+const Tables = require("../models/tableModel");
 
 const getAllBookings = async (req, res) => {
     try {
@@ -25,11 +26,11 @@ const getBookingById = async (req, res) => {
 };
 
 const createBooking = async (req, res) => {
-    const { userId, restaurantId, date, time, numberOfGuests } = req.body;
-    console.log("Booking data:", req.body);
+    const { user_id, restaurant_id, table_id, booking_time, number_of_people, special_request } = req.body;
     
     try {
-        const newBooking = await Bookings.createBooking(userId, restaurantId, date, time, numberOfGuests);
+        const newBooking = await Bookings.createBooking(user_id, restaurant_id, table_id, booking_time, number_of_people, special_request);
+        const updateTable = await Tables.updateTableAvailability(table_id, false);
         res.status(201).json(newBooking);
     } catch (error) {
         console.error("Error creating booking:", error);

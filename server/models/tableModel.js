@@ -66,6 +66,22 @@ const Tables = {
             );
         });
     },
+
+    updateTableAvailability: (id, isAvailable) => {
+        return new Promise((resolve, reject) => {
+            db.query(
+                "UPDATE tables SET is_available = ? WHERE id = ?",
+                [isAvailable, id],
+                (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+        });
+    },
     deleteTable: (id) => {
         return new Promise((resolve, reject) => {
             db.query("DELETE FROM tables WHERE id = ?", [id], (err, result) => {

@@ -119,6 +119,7 @@ const getRestaurantDetails = async (req, res) => {
 
     res.status(200).json({
       name: restaurant[0].name,
+      restaurantId: restaurant[0].id,
       logo: restaurant[0].image_url,
       description: restaurant[0].description,
       images: images.map((img) => img.image_url),
