@@ -1,25 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/TablesPage.css";
+import { createTable, getTablesByRestaurantId } from "../../api/tablesApi";
 
 const TablesPage = () => {
-  const [tables, setTables] = useState([
-    { id: 1, name: "Table 1", seats: 4, isBooked: false },
-    { id: 2, name: "Table 2", seats: 6, isBooked: true },
-  ]);
-  const [selectedTable, setSelectedTable] = useState(null);
-  const [newTableName, setNewTableName] = useState("");
-  const [newSeats, setNewSeats] = useState(1);
+  const [tables, setTables] = useState([]);
+  const [tableData, setTableData] = useState({
+    table_number: "",
+    seats: 0,
+    is_available: "",
+    restaurant_id: 3
+  });
 
-  const addTable = () => {
-    const newTable = {
-      id: Date.now(),
-      name: newTableName,
-      seats: newSeats,
-      isBooked: false,
+  const [selectedTable, setSelectedTable] = useState(null);
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      const response = await getTablesByRestaurantId(3);
+      setTables(response);
+
+      console.log(response);
     };
-    setTables([...tables, newTable]);
-    setNewTableName("");
-    setNewSeats(1);
+    fetchTables();
+  }, []);
+
+
+  const addTable = async (e) => {
+    e.preventDefault();
+    try {
+    const response = await createTable(tableData);
+    setTables([...tables, response])  
+    } 
+    catch (error) {
+      console.error("Error creating table:", error);
+    }
+    
   };
 
   const bookTable = (id) => {
@@ -32,34 +46,36 @@ const TablesPage = () => {
     <div className="order-swift-tables-container">
       <h2 className="order-swift-title">Manage Tables</h2>
 
-      <div className="order-swift-add-table-form">
+      <form onSubmit={addTable} className="order-swift-add-table-form">
         <input
           type="text"
           placeholder="Table Name"
-          value={newTableName}
-          onChange={(e) => setNewTableName(e.target.value)}
+          value={tableData.table_number}
+          onChange={(e) => setTableData({ ...tableData, table_number: e.target.value })}
+          required
         />
         <input
           type="number"
           placeholder="Seats"
-          value={newSeats}
-          onChange={(e) => setNewSeats(Number(e.target.value))}
+          value={tableData.seats}
+          onChange={(e) => setTableData({ ...tableData, seats: e.target.value })}
           min={1}
+          required
         />
-        <button onClick={addTable}>Add Table</button>
-      </div>
+        <button>Add Table</button>
+      </form>
 
       <div className="order-swift-table-grid">
         {tables.map((table) => (
           <div
             key={table.id}
-            className={`order-swift-table-card ${table.isBooked ? "booked" : ""}`}
+            className={`order-swift-table-card ${table.is_available ? "booked" : ""}`}
             onClick={() => setSelectedTable(table)}
           >
-            <h4>{table.name}</h4>
+            <h4>Tabele {table.table_number}</h4>
             <p>Seats: {table.seats}</p>
-            <p>Status: {table.isBooked ? "Booked" : "Available"}</p>
-            {!table.isBooked && (
+            <p>Status: {table.is_available ? "Booked" : "Available"}</p>
+            {!table.is_available && (
               <button onClick={() => bookTable(table.id)}>Book Now</button>
             )}
           </div>

@@ -16,7 +16,6 @@ const Secure = () => {
         Cookies.remove("jwtToken");
         return <Navigate to="/" replace />;
       }
-
       return <Outlet />;
     } catch (error) {
       console.error("Invalid token:", error);

@@ -1,7 +1,7 @@
 import axiosInstance from "./axiosInstance";
 import Cookies from "js-cookie";
 
-export const loginUser = async (loginDetails, navigate, setMessage) => {
+export const loginUser = async (loginDetails, setMessage) => {
   try {
     const response = await axiosInstance.post("/login", loginDetails);
 

@@ -20,6 +20,16 @@ export const getTableBookingById = async (id) => {
   }
 }
 
+export const getBookingsByRestaurantId = async (restaurentId) => {
+  try {
+    const response = await axiosInstance.get("/table-booking/restaurant/" + restaurentId);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching table bookings by restaurant ID", error);
+    throw error;
+  }
+}
+
 export const createTabelBooking = async (bookingData) => {
   try {
     const response = await axiosInstance.post("/table-booking", bookingData);

@@ -10,8 +10,9 @@ const getAllTables = async (req, res) => {
     }
 }
 
-const getTableByRestaurantId = async (req, res) => {    
+const getTablesByRestaurantId = async (req, res) => {    
     const { restaurantId } = req.params;
+    
     try {
         const tables = await Tables.getTableByRestaurantId(restaurantId);
         if (!tables) {
@@ -39,9 +40,9 @@ const getTableById = async (req, res) => {
 };
 
 const createTable = async (req, res) => {
-    const { restaurantId, tableNumber, capacity } = req.body;
+    const { restaurant_id, table_number, seats } = req.body;
     try {
-        const newTable = await Tables.createTable(restaurantId, tableNumber, capacity);
+        const newTable = await Tables.createTable(restaurant_id, table_number, seats);
         res.status(201).json(newTable);
     } catch (error) {
         console.error("Error creating table:", error);
@@ -61,4 +62,4 @@ const updateTable = async (req, res) => {
     }
 };
 
-module.exports = { getAllTables, getTableById, createTable, updateTable, getTableByRestaurantId };
+module.exports = { getAllTables, getTableById, createTable, updateTable, getTablesByRestaurantId };

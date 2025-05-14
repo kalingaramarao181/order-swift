@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import Header from "../components/header";
 import RestaurantDashboardHomePage from "./pages/HomePage";
 import BillingPage from "./pages/BillingPage";
@@ -7,8 +8,23 @@ import TablesPage from "./pages/ManageTablesPage";
 import ManageMenu from "./pages/MangeMenuPage";
 import OrdersPage from "./pages/OrdersPage";
 import ProfilePage from "./pages/ProfilePage";
+import { getRestaurantDetails } from "../api/restaurentApi";
 
 const Dashboard = () => {
+
+  const [restaurantDetails, setRestaurantDetails] = useState({});
+
+  useEffect(() => {
+    const fetchRestaurantDetails = async () => {
+      try {
+        const response = await getRestaurantDetails(3);
+        setRestaurantDetails(response);
+      } catch (error) {
+        console.error("Error fetching restaurant details:", error);
+      }
+    };
+    fetchRestaurantDetails();
+  }, []);
   
   return (
     <div>

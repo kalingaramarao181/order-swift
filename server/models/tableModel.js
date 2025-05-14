@@ -35,13 +35,13 @@ const Tables = {
             });
         });
     },
-    createTable: (restaurantId, tableNumber, capacity) => {
+    createTable: (restaurantId, tableNumber, seats) => {
         return new Promise((resolve, reject) => {
             const sql = `
-                INSERT INTO tables (restaurant_id, table_number, capacity)
+                INSERT INTO tables (restaurant_id, table_number, seats)
                 VALUES (?, ?, ?)
             `;
-            db.query(sql, [restaurantId, tableNumber, capacity], (err, result) => {
+            db.query(sql, [restaurantId, tableNumber, seats], (err, result) => {
                 if (err) {
                     reject(err);
                 } else {

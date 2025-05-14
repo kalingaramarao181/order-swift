@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/BookingPage.css';
+import { getBookingsByRestaurantId } from '../../api/tableBookingApi';
 
 const BookingsPage = () => {
   const [bookings, setBookings] = useState([
@@ -8,14 +9,39 @@ const BookingsPage = () => {
     { id: 3, name: 'Bob Stone', table: 'T3', seats: 3, date: '2025-05-04', time: '6:30 PM', status: 'Cancelled' }
   ]);
 
+  
+  useEffect(() => {
+    const fetchBookings = async () => {
+      const response = await getBookingsByRestaurantId(3);
+      setBookings(response);
+      
+    };
+    fetchBookings();
+  }, []);
+
   const handleAction = (action, id) => {
-    console.log(`Action: ${action} on Booking ID: ${id}`);
+    console.log(`Action: ${action} on Booking ID: ${id}`)
     if (action === 'Cancel') {
       setBookings(prev =>
         prev.map(b => b.id === id ? { ...b, status: 'Cancelled' } : b)
       );
     }
   };
+
+  const converDate = (date) => {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  const converTime = (time) => {
+    const timeObj = new Date(time);
+    const hours = timeObj.getHours();
+    const minutes = timeObj.getMinutes();
+    return `${hours}:${minutes}`;
+  }
 
   return (
     <div className="os-bookings-container">
@@ -54,20 +80,20 @@ const BookingsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map(booking => (
+            {bookings.map(booking => ( 
               <tr key={booking.id}>
                 <td>{booking.name}</td>
-                <td>{booking.table}</td>
-                <td>{booking.seats}</td>
-                <td>{booking.date}</td>
-                <td>{booking.time}</td>
+                <td>{booking.table_id}</td>
+                <td>{booking.number_of_people}</td>
+                <td>{converDate(booking.booking_time)}</td>
+                <td>{converTime(booking.booking_time)}</td>
                 <td>{booking.status}</td>
                 <td>
                   <button className="os-action-btn" onClick={() => handleAction('View', booking.id)}>View</button>
                   {booking.status !== 'Cancelled' && (
                     <button className="os-action-btn" onClick={() => handleAction('Cancel', booking.id)}>Cancel</button>
                   )}
-                </td>
+                </td> 
               </tr>
             ))}
           </tbody>

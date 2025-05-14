@@ -24,9 +24,9 @@ const LoginForm = ({ isPopupOpen, closePopup, role }) => {
     try {
       const response = await loginUser(
         { email, password },
-        navigate("/dashboard"),
         setMessage
       );
+      navigate("/dashboard")
       setMessage("Login successful!");
       console.log(response);
 

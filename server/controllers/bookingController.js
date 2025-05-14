@@ -25,6 +25,20 @@ const getBookingById = async (req, res) => {
     }
 };
 
+const getBookingsByRestaurantId = async (req, res) => {
+    const { restaurentId } = req.params;
+    try {
+        const bookings = await Bookings.getBookingsByRestaurantId(restaurentId);
+        if (!bookings) {
+            return res.status(404).json({ message: 'Bookings not found' });
+        }
+        res.status(200).json(bookings);
+    } catch (error) {
+        console.error("Error fetching table bookings by restaurant ID", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}   
+
 const createBooking = async (req, res) => {
     const { user_id, restaurant_id, table_id, booking_time, number_of_people, special_request } = req.body;
     
@@ -82,5 +96,6 @@ module.exports = {
     createBooking,
     updateBooking,
     deleteBooking,
-    getBookingByUserId
+    getBookingByUserId,
+    getBookingsByRestaurantId
 }
