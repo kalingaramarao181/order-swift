@@ -9,6 +9,7 @@ const {
   getRestaurantImagesById,
   getRestaurantDetails,
   getAllRestaurants,
+  getRestaurantByUserId,
 } = require('../controllers/restaurantController');
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
@@ -57,6 +58,8 @@ const uploadImages = multer({ storage: imagesStorage, fileFilter });
 
 
 router.post('/restaurant-profile', protect, uploadLogo.single('image'), createRestaurantProfile);
+
+router.get('/restaurent/by-user-id/:userId', getRestaurantByUserId);
 
 router.get('/restaurant-profile/:ownerId', protect, getRestaurantProfile);
 

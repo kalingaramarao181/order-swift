@@ -5,9 +5,11 @@ import AddMenuItemForm from "../../forms/addMenuItemForm";
 import { getCookiesData } from "../../utils/cookiesData";
 import { getMenuItemById, deleteMenuItem } from "../../api/menuItemApi";
 import { baseUrl } from "../../config/env";
+import AddOfferForm from "../../forms/addOfferForm";
 
 const ManageMenu = () => {
   const [isAddMenuItemOpen, setIsAddMenuItemOpen] = useState(false);
+  const [isAddOfferOpen, setIsAddOfferOpen] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
   const [editItemData, setEditItemData] = useState(null); 
 
@@ -53,12 +55,20 @@ const ManageMenu = () => {
     <div className="os-menu-container">
       <header className="os-menu-header">
         <h2 className="os-menu-title">Manage Menu</h2>
+        <div>
         <button
           className="os-add-item-btn"
           onClick={() => setIsAddMenuItemOpen(true)}
         >
           + Add New Item
         </button>
+        <button
+          className="os-add-item-btn"
+          onClick={() => setIsAddOfferOpen(true)}
+        >
+          + Add Offers
+        </button>
+        </div>
       </header>
 
       <table className="os-menu-table">
@@ -93,6 +103,26 @@ const ManageMenu = () => {
           ))}
         </tbody>
       </table>
+
+      {isAddOfferOpen  && (
+        <div className="login-popup-overlay">
+          <div className="login-popup">
+            <button
+              className="order-login-close-button"
+              onClick={() => setIsAddOfferOpen(false)}
+            >
+              <MdClose /> 
+            </button>
+            <div className="order-login-page">
+              <AddOfferForm
+                onClose={() => setIsAddOfferOpen(false)}
+                menuItems={menuItems} 
+                restaurantId={getCookiesData().userId}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {isAddMenuItemOpen && (
         <div className="login-popup-overlay">

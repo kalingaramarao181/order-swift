@@ -65,4 +65,46 @@
     text-decoration: none;
     color: inherit;
   }
+
+  .os-welcome-section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .os-section-card.c-active{
+    background-color: #fff4e8;
+    border-color: #fc8019;
+    box-shadow: 0 2px 8px rgba(252, 128, 25, 0.3);
+  }
+
+  .os-section-card-link.active{
+    background-color: #fff4e8;
+    border-color: #fc8019;
+    box-shadow: 0 2px 8px rgba(252, 128, 25, 0.3);
+  }
+
+  .os-welcome-title{
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .os-qr-code-button{
+    background-color: #fc8019;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .qr-code-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
   

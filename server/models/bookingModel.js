@@ -78,9 +78,32 @@ const Bookings = {
             });
         });
     },
+
+
+    getBookingsByCustomerId: (customerId) => {
+        return new Promise((resolve, reject) => {
+            db.query("SELECT * FROM bookings WHERE customer_id = ?", [customerId], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    },
+    
     getBookingsByRestaurantId: (restaurantId) => {
         return new Promise((resolve, reject) => {
-            db.query("SELECT * FROM bookings WHERE restaurant_id = ?", [restaurantId], (err, result) => {
+            db.query(`SELECT 
+                bookings.*,
+                users.name AS user_name,
+                restaurants.name AS restaurant_name,
+                tables.table_number AS table_name
+            FROM bookings
+            JOIN users ON bookings.user_id = users.id
+            JOIN restaurants ON bookings.restaurant_id = restaurants.id
+            JOIN tables ON bookings.table_id = tables.id
+            WHERE bookings.restaurant_id = ?`, [restaurantId], (err, result) => {
                 if (err) {
                     reject(err);
                 } else {

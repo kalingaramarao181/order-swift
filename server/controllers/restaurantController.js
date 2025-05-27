@@ -72,6 +72,19 @@ const getRestaurantImagesById = async (req, res) => {
     }
 };
 
+const getRestaurantByUserId = async (req, res) => {
+  const userId = req.userId;
+  try {
+    const restaurant = await Restaurant.getRestaurantByUserId(userId);
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+    res.status(200).json(restaurant);
+  } catch (error) {
+    console.error("Error fetching restaurant by user ID:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 const getAllRestaurants = async (req, res) => {
     try {
@@ -130,6 +143,8 @@ const getRestaurantDetails = async (req, res) => {
         tableId: table.id,
       })),
       foodItems: foodItems.map((item) => ({
+        id: item.id,
+        restaurantId: item.restaurant_id,
         name: item.name,
         price: item.price,
         description: item.description,
@@ -167,5 +182,6 @@ module.exports = {
     uploadRestaurantImages,
     getRestaurantImagesById,
     getRestaurantDetails,
-    getAllRestaurants
+    getAllRestaurants,
+    getRestaurantByUserId
 };

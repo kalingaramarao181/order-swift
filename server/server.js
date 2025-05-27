@@ -9,6 +9,9 @@ const restaurantRouters = require('./routes/restaurantRoutes');
 const userRouters = require('./routes/userRoutes');
 const bookingRouters = require('./routes/bookingRoutes');
 const tableRouters = require('./routes/tableRoutes');
+const offerRouters = require('./routes/offerRoutes');
+const orderRouters = require('./routes/orderRoutes');
+const customerRouters = require('./routes/customerRoutes');
 
 dotenv.config();
 const app = express();
@@ -22,6 +25,10 @@ app.use('/api', menuItemRouters);
 app.use('/api', restaurantRouters);
 app.use('/api', tableRouters);
 app.use('/api', bookingRouters);
+app.use('/api', offerRouters);
+app.use('/api', orderRouters)
+app.use('/api', customerRouters)
+
 
 
 const PORT = process.env.PORT || 5000;

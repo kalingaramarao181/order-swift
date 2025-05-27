@@ -1,5 +1,4 @@
-import axiosInstance from './axiosInstance'; 
-
+import axiosInstance from "./axiosInstance";
 
 export const addRestaurantProfile = async (formData) => {
   const response = await axiosInstance.post("/restaurant-profile", formData, {
@@ -29,6 +28,16 @@ export const getRestaurantProfile = async () => {
     throw error;
   }
 };
+
+export const getRestaurentByUserId = (userId) => {
+  try {
+    const response = axiosInstance.get("/restaurent/by-user-id/" + userId);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching restaurent by user ID", error);
+    throw error;
+  }
+}
 
 export const getRestaurantProfileById = async (id) => {
   try {

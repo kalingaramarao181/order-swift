@@ -9,6 +9,7 @@ import TableBookingForm from "../../forms/tableBookingForm";
 import { MdClose } from "react-icons/md";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import OrderForm from "../../forms/ordersForm";
 
 const RestaurantDetails = () => {
   const [isOpenBookTableForm, setIsOpenBookTableForm] = useState(false);
@@ -18,6 +19,8 @@ const RestaurantDetails = () => {
   const restaurantId = location.state?.restaurantId;
   const [restaurant, setRestaurant] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [isOpenOrderForm, setIsOpenOrderForm] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
     if (!restaurantId) {
@@ -48,6 +51,11 @@ const RestaurantDetails = () => {
 
     fetchData();
   }, [restaurantId, navigate]);
+
+  const handleOrderClick = (item) => {
+    setOrderDetails(item);
+    setIsOpenOrderForm(true);
+  }
 
   const handleBookTableClick = () => {
     const token = Cookies.get("jwtToken");
@@ -104,7 +112,7 @@ const RestaurantDetails = () => {
                 {item.discount && (
                   <span className="order-food-discount">{item.discount}</span>
                 )}
-                <button className="order-food-button">Order Now</button>
+                <button className="order-food-button" onClick={() => handleOrderClick(item)}>Order Now</button>
               </div>
             </div>
           ))}
@@ -126,6 +134,27 @@ const RestaurantDetails = () => {
                 userId={userId}
                 restaurantData={restaurant}
                 onClose={() => setIsOpenBookTableForm(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {isOpenOrderForm && (
+        <div className="login-popup-overlay">
+          <div className="login-popup">
+            <button
+              className="order-login-close-button"
+              onClick={() => setIsOpenOrderForm(false)}
+            >
+              <MdClose />
+            </button>
+            <div className="order-login-page">
+              <OrderForm
+                userId={userId}
+                orderDetails={orderDetails}
+                onClose={() => setIsOpenOrderForm(false)}
               />
             </div>
           </div>

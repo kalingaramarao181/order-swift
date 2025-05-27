@@ -76,6 +76,13 @@
     border: 1px solid #ccc;
     border-radius: 6px;
   }
+
+  .order-swift-summary select {
+    flex: 1 1 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
   
   /* Total and refund */
   .order-swift-total {
@@ -113,5 +120,17 @@
   
   .order-swift-btn:hover {
     background-color: #ea580c;
+  }
+
+  .order-swift-delete-item-btn{
+    background-color: #f44336;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
   }
   

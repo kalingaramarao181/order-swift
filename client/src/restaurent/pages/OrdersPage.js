@@ -1,18 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/OrdersPage.css';
+import { getOrdersByRestaurantId } from '../../api/orderApi';
 
 const OrdersPage = () => {
-  const [orders, setOrders] = useState([
-    { id: 101, customer: 'Alice', items: 3, amount: 28.5, time: '12:30 PM', status: 'Preparing' },
-    { id: 102, customer: 'Mark', items: 2, amount: 15.0, time: '1:15 PM', status: 'Delivered' },
-    { id: 103, customer: 'Sophie', items: 4, amount: 40.25, time: '1:45 PM', status: 'Cancelled' },
-  ]);
+  const [orders, setOrders] = useState([]);
+
+  // Convert lat,lng to address
+  const getAddressFromCoords = async (lat, lng) => {
+    const apiKey = "AIzaSyDpQYynPI5mi2WKRjpElTO5epXqPcvATBk";
+    
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+    
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.status === 'OK') {
+        return data.results[0]?.formatted_address || 'Unknown address';
+      }
+      return 'Unknown address';
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      return 'Unknown address';
+    }
+  };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const response = await getOrdersByRestaurantId(3);
+
+      const updatedOrders = await Promise.all(
+        response.map(async (order) => {
+          let address = 'Invalid location';
+          try {
+            const location = JSON.parse(order.location);
+            address = await getAddressFromCoords(location.lat, location.lng);
+          } catch (err) {
+            console.error('Location parse error:', err);
+          }
+          return { ...order, address };
+        })
+      );
+
+      setOrders(updatedOrders);
+    };
+
+    fetchOrders();
+  }, []);
 
   const handleAction = (action, id) => {
-    setOrders(prev =>
-      prev.map(order =>
+    setOrders((prev) =>
+      prev.map((order) =>
         order.id === id
-          ? { ...order, status: action === 'Delivered' ? 'Delivered' : action === 'Cancel' ? 'Cancelled' : order.status }
+          ? {
+              ...order,
+              status:
+                action === 'Delivered'
+                  ? 'Delivered'
+                  : action === 'Cancel'
+                  ? 'Cancelled'
+                  : order.status,
+            }
           : order
       )
     );
@@ -40,28 +88,29 @@ const OrdersPage = () => {
       </section>
 
       <section className="os-cards-list">
-  {orders.map(order => (
-    <div className={`os-order-card ${order.status.toLowerCase()}`} key={order.id}>
-      <div className="os-order-top">
-        <div className="os-order-id"># {order.id}</div>
-        <div className={`os-order-status ${order.status.toLowerCase()}`}>{order.status}</div>
-      </div>
-      <p><strong>Customer:</strong> {order.customer}</p>
-      <p><strong>Items:</strong> {order.items}</p>
-      <p><strong>Total:</strong> ${order.amount.toFixed(2)}</p>
-      <p><strong>Time:</strong> {order.time}</p>
-      <div className="os-order-actions">
-        <button className="os-action-btn" onClick={() => alert(`Viewing Order #${order.id}`)}>View</button>
-        {order.status === 'Preparing' && (
-          <>
-            <button className="os-action-btn" onClick={() => handleAction('Delivered', order.id)}>Deliver</button>
-            <button className="os-action-btn" onClick={() => handleAction('Cancel', order.id)}>Cancel</button>
-          </>
-        )}
-      </div>
-    </div>
-  ))}
-</section>
+        {orders.map((order) => (
+          <div className={`os-order-card ${order.status.toLowerCase()}`} key={order.id}>
+            <div className="os-order-top">
+              <div className="os-order-id"># {order.id}</div>
+              <div className={`os-order-status ${order.status.toLowerCase()}`}>{order.status}</div>
+            </div>
+            <p><strong>Customer:</strong> {order.user_name}</p>
+            <p><strong>Items:</strong> {order.food_name}</p>
+            <p><strong>Total:</strong> ${order.total_amout}</p>
+            <p><strong>Time:</strong> {order.time}</p>
+            <p><strong>Address:</strong> <a target="_blank" href={`https://www.google.com/maps?q=${JSON.parse(order.location).lat},${JSON.parse(order.location).lng}`} rel="noopener noreferrer">Show Location</a></p>
+            <div className="os-order-actions">
+              <button className="os-action-btn" onClick={() => alert(`Viewing Order #${order.id}`)}>View</button>
+              {order.status === 'Preparing' && (
+                <>
+                  <button className="os-action-btn" onClick={() => handleAction('Delivered', order.id)}>Deliver</button>
+                  <button className="os-action-btn" onClick={() => handleAction('Cancel', order.id)}>Cancel</button>
+                </>
+              )}
+            </div>
+          </div>
+        ))}
+      </section>
     </div>
   );
 };

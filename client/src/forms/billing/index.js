@@ -5,10 +5,14 @@ import PrintableBill from "../../components/printBill";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getBillMenuItems } from "../../api/menuItemApi";
 import { getRestaurantDetails } from "../../api/restaurentApi";
+import QRCode from 'qrcode';
+
 import { toPng } from "html-to-image";
 import download from "downloadjs";
+import { MdClose } from "react-icons/md";
 
 const OrderSwiftBilling = () => {
+    const [isOpenQrCode, setIsOpenQrCode] = useState(false);
   const [items, setItems] = useState([]);
   const [itemDatabase, setItemDatabase] = useState({});
   const [restaurantDetails, setRestaurantDetails] = useState({});
@@ -40,7 +44,6 @@ const OrderSwiftBilling = () => {
     received: "",
   });
 
-  const [openPrintView, setOpenPrintView] = useState(false);
   const printableRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -62,6 +65,7 @@ const OrderSwiftBilling = () => {
   }, []);
 
   const handleInputChange = (field, value) => {
+
     setBillingInfo((prev) => ({
       ...prev,
       [field]: value,
@@ -107,11 +111,13 @@ const OrderSwiftBilling = () => {
       const newSubtotal = newItems.reduce((acc, i) => acc + i.amount, 0);
       const newTax = (newSubtotal * 0.05).toFixed(2);
       const discountPercentage = parseFloat(billingInfo.discount) || 0;
+      const tipAmount =  ((newSubtotal + parseFloat(newTax)) * parseInt(billingInfo.tip)) / 100  || 0;
       const discountCash = ((newSubtotal + parseFloat(newTax)) * discountPercentage) / 100;
 
       setBillingInfo((prev) => ({
         ...prev,
         discountCash: discountCash.toFixed(2),
+        tip: tipAmount.toFixed(2),
       }));
 
       setItems(newItems);
@@ -148,7 +154,7 @@ const OrderSwiftBilling = () => {
     const subtotal = totals.subtotal;
     const tax = parseFloat(totals.tax) || 0;
     const discountCash = parseFloat(billingInfo.discountCash) || 0;
-    const tip = parseFloat(billingInfo.tip) || 0;
+    const tip = parseInt(billingInfo.tip) || 0;
     return (subtotal + tax + tip - discountCash).toFixed(2);
   };
 
@@ -168,6 +174,20 @@ const OrderSwiftBilling = () => {
       download(dataUrl, "order-bill.png");
     }
   };
+
+  const handleDelete = (index) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  const handleOpenQR = () => {
+    const upiId = "7730020465-3@ybl"
+    const name = "Ramarao";
+    const amount = calculateTotal();
+    const description = `Order Items ${items.map((item) => item.name + " " + item.rate).join(", ")}`;
+    const upiLink = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${encodeURIComponent(description)}`;
+    QRCode.toDataURL(upiLink).then(setIsOpenQrCode);
+
+  }
 
   return (
     <div className="order-swift-billing-container">
@@ -212,6 +232,7 @@ const OrderSwiftBilling = () => {
             <th>Unit</th>
             <th>Rate</th>
             <th>Amount</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody>
@@ -229,6 +250,7 @@ const OrderSwiftBilling = () => {
             <td>{currentItem.unit}</td>
             <td>{currentItem.rate}</td>
             <td>{currentItem.amount}</td>
+            
           </tr>
           {items.map((item, idx) => (
             <tr key={idx}>
@@ -239,6 +261,7 @@ const OrderSwiftBilling = () => {
               <td>{item.unit}</td>
               <td>{item.rate}</td>
               <td>{item.amount}</td>
+              <td><button className="order-swift-delete-item-btn" onClick={() => handleDelete(idx)}>Remove</button></td>
             </tr>
           ))}
         </tbody>
@@ -248,7 +271,12 @@ const OrderSwiftBilling = () => {
         <input placeholder="SubTotal" value={totals.subtotal.toFixed(2)} readOnly />
         <input placeholder="Total Tax" value={totals.tax} readOnly />
         <input onChange={onChangeDiscount} value={billingInfo.discount} placeholder="Discount in %" />
-        <input onChange={(e) => handleInputChange("tip", e.target.value)} value={billingInfo.tip} placeholder="Tip" />
+        <select onChange={(e) => handleInputChange("tip", e.target.value)} value={billingInfo.tip}>
+          <option>Select Tip %</option>
+          <option value="5">5%</option>
+          <option value="10">10%</option>
+          <option value="15">15%</option>
+        </select>
       </div>
 
       <div className="order-swift-total">
@@ -260,8 +288,8 @@ const OrderSwiftBilling = () => {
         <button className="order-swift-btn" onClick={handlePrint}>
           Print
         </button>
-        <button onClick={() => setOpenPrintView(true)} className="order-swift-btn">
-          Pre Bill
+        <button onClick={handleOpenQR} className="order-swift-btn">
+          Pay Bill
         </button>
       </div>
 
@@ -290,30 +318,33 @@ const OrderSwiftBilling = () => {
         </div>
       </div>
 
-      {openPrintView && (
-        <div style={{ marginTop: "20px" }}>
-          <PrintableBill
-            restaurantName={restaurantDetails.name || "Order Swift Restaurant"}
-            billNumber={createBillNumber(restaurantDetails) || "123"}
-            guestName={billingInfo.guestName || "Guest"}
-            tip={billingInfo.tip || 0}
-            totalBill={totals.subtotal.toFixed(2) || 0}
-            tax={totals.tax || 0}
-            mobileNumber={billingInfo.mobileNumber || ""}
-            waiterId={billingInfo.waiterId || "Waiter 1"}
-            tableId={billingInfo.tableId || "T1"}
-            date={new Date().toLocaleDateString()}
-            discount={billingInfo.discountCash || 0}
-            items={items.map((item) => ({
-              name: item.name,
-              code: item.code,
-              quantity: item.qty,
-              plates: 1,
-              price: item.rate,
-            }))}
-          />
+      {isOpenQrCode && (
+        <div className="login-popup-overlay">
+      <div className="login-popup">
+        <button
+          className="order-login-close-button"
+          onClick={() => setIsOpenQrCode(false)}
+        >
+          <MdClose />
+        </button>
+        <div className="order-login-page">
+          <div className="qr-code-container" style={{ background: "white", padding: "16px" }}>
+          <h1 className="os-welcome-title">Scan & Pay</h1>
+            <img src={isOpenQrCode} alt="UPI QR Code" />
+          <h1 className="os-welcome-title">{calculateTotal()}</h1>
+            <p style={{ textAlign: "center", marginTop: "10px" }}>Scan this QR code to pay</p>
+          </div>
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <button onClick={handlePrint} className="os-qr-code-button">Generate Bill</button>
+          </div>
         </div>
+      </div>
+    </div>
       )}
+
+
+
+
     </div>
   );
 };

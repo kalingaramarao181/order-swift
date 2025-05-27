@@ -80,10 +80,10 @@ const BookingsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map(booking => ( 
+            {bookings.map((booking, index) => ( 
               <tr key={booking.id}>
-                <td>{booking.name}</td>
-                <td>{booking.table_id}</td>
+                <td>{booking.user_name}</td>
+                <td>{"T" + (index + 1)}</td>
                 <td>{booking.number_of_people}</td>
                 <td>{converDate(booking.booking_time)}</td>
                 <td>{converTime(booking.booking_time)}</td>

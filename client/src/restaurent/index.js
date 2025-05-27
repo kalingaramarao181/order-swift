@@ -30,7 +30,7 @@ const Dashboard = () => {
     <div>
       <Header />
       <Routes>
-        <Route path="/" element={<RestaurantDashboardHomePage />} />
+        <Route path="/" element={<RestaurantDashboardHomePage restaurantDetails={restaurantDetails} />} />
         <Route path="/billing" element={<BillingPage />} />
         <Route path="/bookings" element={<BookingsPage />} />
         <Route path="/tables" element={<TablesPage />} />

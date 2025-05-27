@@ -68,6 +68,8 @@ export const getUserById = async (userId) => {
   }
 }
 
+
+
 export const registerUser = async (registerDetails) => {
   try {
     const response = await axiosInstance.post("/register", registerDetails);

@@ -28,7 +28,6 @@ const loginUser = async (req, res) => {
     const user = await User.findByEmail(email);
     if (!user)
       return res.status(400).json({ message: "Invalid email or password" });
-
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({ message: "Invalid email or password" });
@@ -54,6 +53,7 @@ const loginUser = async (req, res) => {
   }
 };
 
+ 
 const sendOtp = async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required" });
@@ -69,8 +69,6 @@ const sendOtp = async (req, res) => {
     
 
     await sendEmail(email, "Password Reset OTP", `Your OTP is: ${otp}. It expires in 5 minutes.`);
-    console.log("OTP sent successfully", token);
-    
     res.json({ message: "OTP sent successfully", token });
   } catch (error) {
     console.error("Error in send-otp:", error);

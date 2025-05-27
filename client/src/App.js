@@ -5,16 +5,18 @@ import Dashboard from "./restaurent";
 import Secure from "./components/Secure";
 import Billing from "./forms/billing";
 import RestaurantDetails from "./components/RestrentDetails";
+import UserDashboard from "./userDashboard";
 
 function App() {
   return (
     <Router>
       <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/billing" element={<Billing />} />
       <Route path="/restaurant/:restaurantId" element={<RestaurantDetails />} />
       <Route element={<Secure />}>
           <Route path="/dashboard/*" element={<Dashboard />} />
+          <Route path="/c-dashboard/*" element={<UserDashboard />} />
+          <Route path="/billing" element={<Billing />} />
         </Route>
       </Routes>
     </Router>

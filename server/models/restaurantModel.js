@@ -17,6 +17,18 @@ const Restaurant = {
       );
     });
   },
+
+  getRestaurantByUserId: (userId) => {
+    return new Promise((resolve, reject) => {
+      const sql = `
+                SELECT * FROM restaurants WHERE owner_id = ?
+            `;
+      db.query(sql, [userId], (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      }); 
+    })
+  },
   getRestaurantProfile: () => {
     return new Promise((resolve, reject) => {
       db.query("SELECT * FROM restaurants", (err, result) => {
