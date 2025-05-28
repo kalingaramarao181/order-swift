@@ -1,0 +1,20 @@
+.res-edit-button, .res-delete-button{
+    background-color: #fc8019;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.res-delete-button{
+    background-color: red;
+}
+
+.res-delete-button:hover, .res-edit-button:hover{
+    transform: scale(1.1);
+}

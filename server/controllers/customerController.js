@@ -27,10 +27,4 @@ const getCustumerDetails = async (req, res) => {
 };
 
 
-
-
-
-
-module.exports = {
-    getCustumerDetails,
-};
+module.exports = { getCustumerDetails, };

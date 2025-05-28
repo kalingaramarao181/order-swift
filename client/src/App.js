@@ -6,6 +6,7 @@ import Secure from "./components/Secure";
 import Billing from "./forms/billing";
 import RestaurantDetails from "./components/RestrentDetails";
 import UserDashboard from "./userDashboard";
+import AdminDashboard from "./adminDashboard";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route element={<Secure />}>
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/c-dashboard/*" element={<UserDashboard />} />
+          <Route path="/a-dashboard/*" element={<AdminDashboard />} />
           <Route path="/billing" element={<Billing />} />
         </Route>
       </Routes>

@@ -117,7 +117,25 @@ const User = {
                 }
             );
         });
-    }
+    },
+    findAllUsers: () => {
+        return new Promise((resolve, reject) => {
+            db.query(
+                `SELECT users.*, roles.name as role FROM users 
+                 JOIN roles ON users.role_id = roles.id`, 
+                (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else if (result.length === 0) {
+                        resolve(null);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+        });
+    },
+
 };
 
 module.exports = User;

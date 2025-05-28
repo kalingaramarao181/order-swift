@@ -95,10 +95,16 @@ const Restaurant = {
     return new Promise((resolve, reject) => {
       db.query(
         `SELECT 
-         r.id AS restaurant_id, r.name, r.description, r.location, r.image_url AS logo,
-         ri.image_url AS restaurant_image
-       FROM restaurants r
-       LEFT JOIN restaurant_images ri ON r.id = ri.restaurant_id`,
+            r.id AS restaurant_id,
+            r.name,
+            r.description,
+            r.location,
+            r.image_url AS logo,
+            ri.image_url AS restaurant_image,
+            u.name AS owner_name
+        FROM restaurants r
+        LEFT JOIN restaurant_images ri ON r.id = ri.restaurant_id
+        LEFT JOIN users u ON r.owner_id = u.id`,
         (err, result) => {
           if (err) {
             reject(err);

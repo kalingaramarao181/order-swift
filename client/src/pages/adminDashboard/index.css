@@ -1,0 +1,103 @@
+.admin-dash-container {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff8f0;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fc8019;
+  color: white;
+  padding: 10px 20px;
+}
+
+.admin-dash-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.admin-dash-nav a {
+  margin: 0 8px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-dash-logout {
+  background: white;
+  color: #fc8019;
+  border: none;
+  padding: 6px 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-dash-welcome {
+  padding: 20px;
+}
+
+.admin-dash-welcome h2 {
+  color: #fc8019;
+}
+
+.admin-dash-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 20px;
+}
+
+.admin-dash-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #fff3e0;
+  padding: 15px 20px;
+  border-radius: 10px;
+  width: 250px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.admin-dash-icon {
+  font-size: 2rem;
+}
+
+.admin-dash-card p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.admin-dash-card h3 {
+  margin: 0;
+  color: #fc8019;
+}
+
+.admin-dash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 20px;
+}
+
+.admin-dash-action-btn {
+  background: white;
+  border: 2px solid #fc8019;
+  font-size: 16px;
+  padding: 20px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #fc8019;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 240px;
+}
+
+.admin-dash-action-btn:hover {
+  background: #fc8019;
+  color: white;
+}

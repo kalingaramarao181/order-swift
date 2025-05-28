@@ -99,7 +99,8 @@ const getAllRestaurants = async (req, res) => {
                 description: row.description,
                 location: row.location,
                 logo: row.logo,
-                images: []
+                ownerName: row.owner_name,
+                images: [],
               };
             }
             if (row.restaurant_image) {

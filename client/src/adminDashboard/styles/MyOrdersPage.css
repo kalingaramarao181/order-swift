@@ -1,0 +1,105 @@
+.myorders-container {
+  padding: 30px;
+  background-color: #fefaf6;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.myorders-heading {
+  font-size: 26px;
+  color: #fa5d00;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.myorders-table-wrapper {
+  overflow-x: auto;
+}
+
+.myorders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.myorders-table thead {
+  background-color: #ffe8d9;
+  color: #333;
+}
+
+.myorders-table th,
+.myorders-table td {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.myorders-table td {
+  color: #444;
+}
+
+.myorders-status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.myorders-status.delivered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.myorders-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.myorders-status.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.myorders-btn-outline {
+  background: none;
+  border: 1px solid #fa5d00;
+  color: #fa5d00;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-right: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.3s;
+}
+
+.myorders-btn-outline:hover {
+  background: #fa5d00;
+  color: white;
+}
+
+.myorders-btn-primary {
+  background: #fa5d00;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.myorders-btn-primary:hover {
+  background: #e45100;
+}
+
+.myorders-empty {
+  text-align: center;
+  color: #999;
+  font-size: 16px;
+  margin-top: 30px;
+}
