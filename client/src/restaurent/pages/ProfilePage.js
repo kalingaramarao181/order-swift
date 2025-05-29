@@ -33,6 +33,8 @@ const ProfilePage = () => {
       try {
         const ownerId = getCookiesData().userId;
         const restaurantData = await getRestaurantProfileById(ownerId);
+        console.log("Restaurant Data:", restaurantData);
+        
         const userDataRes = await getUserById(ownerId);
         const restaurantImagesRes = await getRestaurantImagesById(restaurantData[0]?.id);
         if (restaurantData[0] !== undefined) {

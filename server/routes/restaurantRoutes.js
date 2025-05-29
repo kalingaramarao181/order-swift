@@ -69,7 +69,7 @@ router.get('/restaurant-details/:restaurantId', getRestaurantDetails)
 
 router.get('/restaurant-profile/images/:restaurantId', protect, getRestaurantImagesById);
 
-router.post('/restaurant-profile/images', protect, uploadImages.array('images'), uploadRestaurantImages);
+router.post('/restaurant-profile/images', uploadImages.array('images'), uploadRestaurantImages);
 
 
 module.exports = router;

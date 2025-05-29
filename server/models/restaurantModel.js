@@ -29,9 +29,9 @@ const Restaurant = {
       }); 
     })
   },
-  getRestaurantProfile: () => {
+  getRestaurantProfile: (owner_id) => {
     return new Promise((resolve, reject) => {
-      db.query("SELECT * FROM restaurants", (err, result) => {
+      db.query("SELECT * FROM restaurants where owner_id = ?", [owner_id], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -80,6 +80,22 @@ const Restaurant = {
       db.query(
         "SELECT * FROM restaurants WHERE id = ?",
         [restaurantId],
+        (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  },
+
+  getRestaurentByUserId: (userId) => {
+    return new Promise((resolve, reject) => {
+      db.query(
+        "SELECT * FROM restaurants WHERE owner_id = ?",
+        [userId],
         (err, result) => {
           if (err) {
             reject(err);

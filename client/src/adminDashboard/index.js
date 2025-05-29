@@ -10,17 +10,25 @@ import {getRestaurants} from "../api/restaurentApi";
 import RestaurantsPage from "./pages/RestaurantsPage";
 import { getAllUsers } from "../api/usersApi";
 import UsersPage from "./pages/UsersPage";
+import { getCookiesData } from "../utils/cookiesData";
+import { getUserDetails } from "../api/authApi";
 
 const AdminDashboard = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [users, setUsers] = useState([]);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
+        const userId = getCookiesData().userId;
+        const userDetails = await getUserDetails(userId);
         const response = await getRestaurants();
         const users = await getAllUsers();
         setRestaurants(response);
+        setUserData(userDetails);
+        console.log("User Details:", userDetails);
+        
         setUsers(users);
       } catch (error) {
         console.error("Error fetching restaurants:", error);
@@ -30,7 +38,6 @@ const AdminDashboard = () => {
   }, []);
 
   
-
   const orders = [
   {
     id: "ORD1024",
@@ -90,7 +97,7 @@ const customer = {
         <div className="os-welcome-section-header">
           <div className="os-welcome-section-header-left">
             <h2 className="os-welcome-title">Welcome</h2>
-            <p className="os-restaurant-name">Ramarao Kalinga</p> 
+            <p className="os-restaurant-name">{userData.fullName} ({userData.role})</p> 
           </div>
         </div>
 
@@ -100,7 +107,7 @@ const customer = {
             <br />
             <strong>42</strong>
           </div>
-          <div className="os-stat-card">
+          <div className="os-stat-card">choosava that is Ramarao
             👤 Total Users
             <br />
             <strong>3,240</strong>
@@ -129,38 +136,38 @@ const customer = {
       </section>
 
       <section className="os-sections-grid">
-        <Link className={`os-section-card-link`} to="/a-dashboard/restaurants">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/restaurants" && "c-active"}`}>🏪 Manage Restaurants</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-restaurants">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-restaurants" && "c-active"}`}>🏪 Manage Restaurants</div>
         </Link>
-        <Link className={`os-section-card-link`} to="/a-dashboard/users">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/users" && "c-active"}`}>👥 Manage Users</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-users">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-users" && "c-active"}`}>👥 Manage Users</div>
         </Link>
-        <Link className={`os-section-card-link`} to="/a-dashboard/orders">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/orders" && "c-active"}`}>📦 View Orders</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-orders">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-orders" && "c-active"}`}>📦 View Orders</div>
         </Link>
-        <Link className={`os-section-card-link`} to="/a-dashboard/bookings">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/bookings" && "c-active"}`}>📅 View Bookings</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-bookings">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-bookings" && "c-active"}`}>📅 View Bookings</div>
         </Link>
-        <Link className={`os-section-card-link`} to="/a-dashboard/records">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/records" && "c-active"}`}>🧾 Billing Records</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-records">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-records" && "c-active"}`}>🧾 Billing Records</div>
         </Link>
-        <Link className={`os-section-card-link`} to="/a-dashboard/reports">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/reports" && "c-active"}`}>📊 Generate Reports</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-reports">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-reports" && "c-active"}`}>📊 Generate Reports</div>
         </Link>
-        <Link className={`os-section-card-link`} to="/a-dashboard/messages">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/messages" && "c-active"}`}>✉️ Support Messages</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-messages">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-messages" && "c-active"}`}>✉️ Support Messages</div>
         </Link>
-        <Link className={`os-section-card-link`} to="/a-dashboard/settings">
-          <div className={`os-section-card ${useLocation().pathname === "/a-dashboard/settings" && "c-active"}`}>⚙️ Admin Settings</div>
+        <Link className={`os-section-card-link`} to="/dashboard/a-settings">
+          <div className={`os-section-card ${useLocation().pathname === "/dashboard/a-settings" && "c-active"}`}>⚙️ Admin Settings</div>
         </Link>
       </section>
       <Routes>
-        <Route path="/orders" element={<MyOrdersPage orders={orders} />} />
-        <Route path="/restaurants" element={<RestaurantsPage restaurants={restaurants} />} />
-        <Route path="/users" element={<UsersPage users={users} />} />
-        <Route path="/profile" element={<CustomerProfilePage customerData={customer} />} />
-        <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/notifications" element={<NotificationsPage notifications={notifications} />} />
+        <Route path="/a-orders" element={<MyOrdersPage orders={orders} />} />
+        <Route path="/a-restaurants" element={<RestaurantsPage restaurants={restaurants} />} />
+        <Route path="/a-users" element={<UsersPage users={users} />} />
+        <Route path="/a-profile" element={<CustomerProfilePage customerData={customer} />} />
+        <Route path="/a-feedback" element={<FeedbackPage />} />
+        <Route path="/a-notifications" element={<NotificationsPage notifications={notifications} />} />
       </Routes>
     </div>
   );

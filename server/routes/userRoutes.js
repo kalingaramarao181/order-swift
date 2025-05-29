@@ -1,7 +1,7 @@
 const express = require('express');
-const { registerUser, loginUser, getUserProfile, updateUserRole, getUserDetails, getUsersByRole } = require('../controllers/authController');
+const { registerUser, loginUser, getUserProfile, updateUserRole, getUsersByRole } = require('../controllers/authController');
 const { protect, authorize } = require('../middlewares/authMiddleware');
-const { getUserById, getAllUsers } = require('../controllers/userController');
+const { getUserById, getAllUsers, getUserDetails } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -13,6 +13,7 @@ const router = express.Router();
 // router.get('/users-by-role/:roleId', protect, getUsersByRole);
 router.get('/user/:userId', getUserById);
 router.get('/users/all', getAllUsers);
+router.get('/user-details/:userId', protect, getUserDetails);
 
 
 

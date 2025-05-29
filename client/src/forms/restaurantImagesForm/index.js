@@ -27,6 +27,7 @@ const RestaurantImagesForm = ({ restaurantData, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const restaurantId = restaurantData.id;
+    console.log("Restaurant ID:", restaurantId);
     
 
     const formData = new FormData();

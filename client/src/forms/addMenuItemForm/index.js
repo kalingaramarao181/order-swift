@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { addMenuItem, updateMenuItem } from "../../api/menuItemApi";
 import { getCategouries } from "../../api/menuItemApi";
 import "./index.css";
-import { getCookiesData } from "../../utils/cookiesData";
 
-const AddMenuItemForm = ({ onClose, editData }) => {
+const AddMenuItemForm = ({ onClose, editData, restaurantId }) => {
+  console.log("restId",restaurantId);
+  
   const [file, setFile] = useState(null);
   const [itemName, setItemName] = useState("");
   const [price, setPrice] = useState("");
@@ -58,7 +59,6 @@ const AddMenuItemForm = ({ onClose, editData }) => {
       return;
     }
   
-    const restaurantId = getCookiesData().userId;
   
     const formData = new FormData();
     formData.append("restaurantId", restaurantId);

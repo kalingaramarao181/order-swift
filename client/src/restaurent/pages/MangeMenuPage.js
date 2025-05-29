@@ -1,31 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../styles/MenuPage.css";
 import { MdClose } from "react-icons/md";
 import AddMenuItemForm from "../../forms/addMenuItemForm";
-import { getCookiesData } from "../../utils/cookiesData";
-import { getMenuItemById, deleteMenuItem } from "../../api/menuItemApi";
+import {  deleteMenuItem } from "../../api/menuItemApi";
 import { baseUrl } from "../../config/env";
 import AddOfferForm from "../../forms/addOfferForm";
 
-const ManageMenu = () => {
+const ManageMenu = ({menuItems, restaurantId}) => {
   const [isAddMenuItemOpen, setIsAddMenuItemOpen] = useState(false);
   const [isAddOfferOpen, setIsAddOfferOpen] = useState(false);
-  const [menuItems, setMenuItems] = useState([]);
   const [editItemData, setEditItemData] = useState(null); 
 
   const fetchMenuItems = async () => {
-    try {
-      const restaurantId = getCookiesData().userId;
-      const data = await getMenuItemById(restaurantId);
-      setMenuItems(data);
-    } catch (error) {
-      console.error("Error fetching menu items", error);
-    }
+    return menuItems
   };
 
-  useEffect(() => {
-    fetchMenuItems();
-  }, []);
 
   const handleDelete = async (itemId) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
@@ -117,7 +106,7 @@ const ManageMenu = () => {
               <AddOfferForm
                 onClose={() => setIsAddOfferOpen(false)}
                 menuItems={menuItems} 
-                restaurantId={getCookiesData().userId}
+                restaurantId={restaurantId}
               />
             </div>
           </div>
@@ -137,6 +126,7 @@ const ManageMenu = () => {
               <AddMenuItemForm
                 onClose={handleCloseForm}
                 editData={editItemData}
+                restaurantId={restaurantId}
               />
             </div>
           </div>

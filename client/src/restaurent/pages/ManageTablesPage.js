@@ -1,33 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../styles/TablesPage.css";
-import { createTable, getTablesByRestaurantId } from "../../api/tablesApi";
+import { createTable } from "../../api/tablesApi";
 
-const TablesPage = () => {
-  const [tables, setTables] = useState([]);
+const TablesPage = ({tables, setTables, restaurantId}) => {
   const [tableData, setTableData] = useState({
     table_number: "",
     seats: 0,
     is_available: "",
-    restaurant_id: 3
+    restaurant_id: restaurantId
   });
 
+
   const [selectedTable, setSelectedTable] = useState(null);
-
-  useEffect(() => {
-    const fetchTables = async () => {
-      const response = await getTablesByRestaurantId(3);
-      setTables(response);
-
-      console.log(response);
-    };
-    fetchTables();
-  }, []);
-
 
   const addTable = async (e) => {
     e.preventDefault();
     try {
-    const response = await createTable(tableData);
+    const response = await await createTable({
+      ...tableData,
+      restaurant_id: restaurantId,
+    });
     setTables([...tables, response])  
     } 
     catch (error) {

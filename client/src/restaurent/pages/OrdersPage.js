@@ -1,64 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/OrdersPage.css';
-import { getOrdersByRestaurantId } from '../../api/orderApi';
 
-const OrdersPage = () => {
-  const [orders, setOrders] = useState([]);
-
-  // Convert lat,lng to address
-  const getAddressFromCoords = async (lat, lng) => {
-    const apiKey = "AIzaSyDpQYynPI5mi2WKRjpElTO5epXqPcvATBk";
-    
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
-    
-
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.status === 'OK') {
-        return data.results[0]?.formatted_address || 'Unknown address';
-      }
-      return 'Unknown address';
-    } catch (error) {
-      console.error('Geocoding error:', error);
-      return 'Unknown address';
-    }
-  };
+const OrdersPage = ({orders}) => {
+const [localOrders, setLocalOrders] = useState([]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const response = await getOrdersByRestaurantId(3);
-
-      const updatedOrders = await Promise.all(
-        response.map(async (order) => {
-          let address = 'Invalid location';
-          try {
-            const location = JSON.parse(order.location);
-            address = await getAddressFromCoords(location.lat, location.lng);
-          } catch (err) {
-            console.error('Location parse error:', err);
-          }
-          return { ...order, address };
-        })
-      );
-
-      setOrders(updatedOrders);
-    };
-
-    fetchOrders();
-  }, []);
+    setLocalOrders(orders);
+  }, [orders]);
 
   const handleAction = (action, id) => {
-    setOrders((prev) =>
+    setLocalOrders((prev) =>
       prev.map((order) =>
         order.id === id
           ? {
               ...order,
               status:
-                action === 'Delivered'
-                  ? 'Delivered'
-                  : action === 'Cancel'
-                  ? 'Cancelled'
+                action === "Delivered"
+                  ? "Delivered"
+                  : action === "Cancel"
+                  ? "Cancelled"
                   : order.status,
             }
           : order
@@ -88,7 +48,7 @@ const OrdersPage = () => {
       </section>
 
       <section className="os-cards-list">
-        {orders.map((order) => (
+        {localOrders.map((order) => (
           <div className={`os-order-card ${order.status.toLowerCase()}`} key={order.id}>
             <div className="os-order-top">
               <div className="os-order-id"># {order.id}</div>

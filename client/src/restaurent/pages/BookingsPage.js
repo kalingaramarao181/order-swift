@@ -1,23 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import '../styles/BookingPage.css';
-import { getBookingsByRestaurantId } from '../../api/tableBookingApi';
 
-const BookingsPage = () => {
-  const [bookings, setBookings] = useState([
-    { id: 1, name: 'John Doe', table: 'T1', seats: 4, date: '2025-05-03', time: '7:00 PM', status: 'Confirmed' },
-    { id: 2, name: 'Jane Smith', table: 'T2', seats: 2, date: '2025-05-03', time: '8:00 PM', status: 'Pending' },
-    { id: 3, name: 'Bob Stone', table: 'T3', seats: 3, date: '2025-05-04', time: '6:30 PM', status: 'Cancelled' }
-  ]);
+const BookingsPage = ({bookings, setBookings}) => {
 
-  
-  useEffect(() => {
-    const fetchBookings = async () => {
-      const response = await getBookingsByRestaurantId(3);
-      setBookings(response);
-      
-    };
-    fetchBookings();
-  }, []);
 
   const handleAction = (action, id) => {
     console.log(`Action: ${action} on Booking ID: ${id}`)
@@ -101,6 +85,6 @@ const BookingsPage = () => {
       </section>
     </div>
   );
-};
+};  
 
 export default BookingsPage;

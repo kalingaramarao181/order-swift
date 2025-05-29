@@ -12,7 +12,7 @@ export const addMenuItem = async (formData) => {
 export const getMenuItems = async () => {
   try {
     const response = await axiosInstance.get("/menu-items");
-    return response.data;
+    return response.data; 
   } catch (error) {
     console.error("Error fetching menu items", error);
     throw error;

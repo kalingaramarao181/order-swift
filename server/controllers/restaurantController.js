@@ -19,6 +19,7 @@ const createRestaurantProfile = async (req, res) => {
 const uploadRestaurantImages = async (req, res) => {
     const { restaurantId } = req.body;
     
+    
     const files = req.files;
   
     if (!files || files.length === 0) {
@@ -48,8 +49,9 @@ const uploadRestaurantImages = async (req, res) => {
   };
 
 const getRestaurantProfile = async (req, res) => {
+  const { ownerId } = req.params;
     try {
-        const restaurantProfile = await Restaurant.getRestaurantProfile();
+        const restaurantProfile = await Restaurant.getRestaurantProfile(ownerId);
         res.status(200).json(restaurantProfile);
     } catch (error) {
         console.error("Error fetching restaurant profile:", error);
