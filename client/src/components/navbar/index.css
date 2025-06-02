@@ -29,7 +29,6 @@
 }
 
 .app-button {
-    /* background: white; */
     color: #fc8019;
     border: none;
     padding: 8px 12px;
@@ -41,7 +40,6 @@
 }
 
 .sign-in-button {
-    /* background: black; */
     color: rgb(0, 0, 0);
     padding: 8px 14px;
     border: none;
@@ -96,3 +94,75 @@
   .keep-signing-in{
     margin-top: 16px !important;
   }
+
+  @media (max-width: 768px) {
+  .swiggy-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .swiggy-logo {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .swiggy-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .app-button,
+  .sign-in-button {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .swiggy-nav a {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-popup {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .order-login-close-button {
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+  }
+
+  .order-login-page {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .order-login-forgot-password,
+  .order-login-signup span {
+    font-size: 14px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-button,
+  .sign-in-button {
+    padding: 10px;
+    font-size: 14px;
+    height: auto;
+    min-height: 45px;
+  }
+  .app-button{
+    align-self: right;
+  }
+  .header-nav-link{
+    align-self: flex-end;
+    position: fixed;
+    top: 2px;
+  }
+}

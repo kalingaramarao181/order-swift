@@ -2,27 +2,66 @@ import { Link, useLocation } from "react-router-dom";
 import "./index.css";
 import { useState, useEffect } from "react";
 import LogoutConfirm from "../LogoutConfirm";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+import { FiMenu, FiX } from "react-icons/fi";
+import { getUserDetails } from "../../api/authApi";
+import { getCookiesData } from "../../utils/cookiesData";
+import { TiLocationArrowOutline } from "react-icons/ti";
+import { IoFastFoodOutline, IoNotificationsSharp } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
+import { RiFeedbackLine } from "react-icons/ri";
 
 const Header = () => {
   const [openLogoutConfirm, setOpenLogoutConfirm] = useState(false);
   const [role, setRole] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [userData, setUserData] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const token = Cookies.get("jwtToken");
-    if (token) {
+    const fetchUserData = async () => {
       try {
-        const decoded = jwtDecode(token);
-        setRole(decoded.role);
-      } catch {
-        setRole("");
+        const cookiesData = getCookiesData();
+        const response = await getUserDetails(cookiesData.userId);
+        setRole(cookiesData.role);
+        setUserData(response);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-    }
+    };
+    fetchUserData();
   }, []);
 
-  const isActive = (path) => location.pathname === path ? "active" : "";
+  const isActive = (path) => (location.pathname === path ? "active" : "");
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+
+  const navLinks = {
+    1: [
+      { path: "/dashboard/a-restaurants", label: "Restaurants" },
+      { path: "/dashboard/a-users", label: "Users" },
+      { path: "/dashboard/a-orders", label: "Orders" },
+      { path: "/dashboard/a-bookings", label: "Bookings" },
+      { path: "/dashboard/a-records", label: "Records" },
+      { path: "/dashboard/a-reports", label: "Reports" },
+      { path: "/dashboard/a-messages", label: "Messages" },
+      { path: "/dashboard/a-settings", label: "Settings" },
+    ],
+    2: [
+      { path: "/dashboard/manage-menu", label: "Menu" },
+      { path: "/dashboard/tables", label: "Tables" },
+      { path: "/dashboard/bookings", label: "Bookings" },
+      { path: "/dashboard/orders", label: "Orders" },
+      { path: "/dashboard/billing", label: "Billing" },
+      { path: "/dashboard/profile", label: "Profile" },
+    ],
+    3: [
+      { path: "/dashboard/c-orders", label: "My Orders" },
+      { path: "/dashboard/c-billing", label: "Billing" },
+      { path: "/dashboard/c-transactions", label: "Transactions" },
+    ],
+  };
 
   return (
     <header className="os-dashboard-header">
@@ -30,54 +69,75 @@ const Header = () => {
         <Link className="header-nav-link" to="/">Order Swift</Link>
       </div>
 
-      <nav className="os-nav">
-        <Link to="/dashboard" className={`order-nav-item ${isActive("/dashboard")}`}>
+      <nav className={`os-nav ${menuOpen ? "open" : ""}`}>
+        <div className="os-user-mobile-profile">
+          <img
+            src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg"
+            alt="User Avatar"
+            className="os-user-avatar"
+          />
+          <p>{userData?.fullName}</p>
+        </div>
+
+        
+
+        <Link onClick={closeMenu} to="/dashboard" className={`order-nav-item ${isActive("/dashboard")}`}>
           Dashboard
         </Link>
 
-        {/* Restaurant Owner Links */}
-        {role === 2 && (
-          <>
-            <Link to="/dashboard/manage-menu" className={`order-nav-item ${isActive("/dashboard/manage-menu")}`}>Menu</Link>
-            <Link to="/dashboard/tables" className={`order-nav-item ${isActive("/dashboard/tables")}`}>Tables</Link>
-            <Link to="/dashboard/bookings" className={`order-nav-item ${isActive("/dashboard/bookings")}`}>Bookings</Link>
-            <Link to="/dashboard/orders" className={`order-nav-item ${isActive("/dashboard/orders")}`}>Orders</Link>
-            <Link to="/dashboard/billing" className={`order-nav-item ${isActive("/dashboard/billing")}`}>Billing</Link>
-            <Link to="/dashboard/profile" className={`order-nav-item ${isActive("/dashboard/profile")}`}>Profile</Link>
-          </>
-        )}
+        {navLinks[role]?.map(({ path, label }) => (
+          <Link
+            key={path}
+            onClick={closeMenu}
+            to={path}
+            className={`order-nav-item ${isActive(path)}`}
+          >
+            {label}
+          </Link>
+        ))}
 
-        {/* Customer Links */}
-        {role === 3 && (
-          <>
-            <Link to="/dashboard/c-orders" className={`order-nav-item ${isActive("/dashboard/c-orders")}`}>My Orders</Link>
-            <Link to="/dashboard/c-billing" className={`order-nav-item ${isActive("/dashboard/c-billing")}`}>Billing</Link>
-            <Link to="/dashboard/c-transactions" className={`order-nav-item ${isActive("/dashboard/c-transactions")}`}>Transactions</Link>
-            <Link to="/dashboard/c-profile" className={`order-nav-item ${isActive("/dashboard/c-profile")}`}>Profile</Link>
-            <Link to="/dashboard/c-feedback" className={`order-nav-item ${isActive("/dashboard/c-feedback")}`}>Feedback</Link>
-            <Link to="/dashboard/c-notifications" className={`order-nav-item ${isActive("/dashboard/c-notifications")}`}>Notifications</Link>
-          </>
-        )}
-
-        {/* Admin Links */}
-        {role === 1 && (
-          <>
-            <Link to="/dashboard/a-restaurants" className={`order-nav-item ${isActive("/dashboard/a-restaurants")}`}>Restaurants</Link>
-            <Link to="/dashboard/a-users" className={`order-nav-item ${isActive("/dashboard/a-users")}`}>Users</Link>
-            <Link to="/dashboard/a-orders" className={`order-nav-item ${isActive("/dashboard/a-orders")}`}>Orders</Link>
-            <Link to="/dashboard/a-bookings" className={`order-nav-item ${isActive("/dashboard/a-bookings")}`}>Bookings</Link>
-            <Link to="/dashboard/a-records" className={`order-nav-item ${isActive("/dashboard/a-records")}`}>Records</Link>
-            <Link to="/dashboard/a-reports" className={`order-nav-item ${isActive("/dashboard/a-reports")}`}>Reports</Link>
-            <Link to="/dashboard/a-messages" className={`order-nav-item ${isActive("/dashboard/a-messages")}`}>Messages</Link>
-            <Link to="/dashboard/a-settings" className={`order-nav-item ${isActive("/dashboard/a-settings")}`}>Settings</Link>
-          </>
-        )}
+        <button
+          onClick={() => setOpenLogoutConfirm(true)}
+          className="os-logout-btn os-mobile-logout"
+        >
+          Logout
+        </button>
       </nav>
 
-      <button onClick={() => setOpenLogoutConfirm(true)} className="os-logout-btn">
-        Logout
-      </button>
+      <div className="os-user-info-container os-desktop-logout">
+        <div className="os-user-avatar-container" onClick={toggleDropdown}>
+          <img
+            src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg"
+            alt="User Avatar"
+            className="os-user-avatar"
+          />
+          <p>{userData?.fullName}</p>
+        </div>
 
+        <ul className={`os-user-info ${showDropdown ? "dropdown-show" : ""}`}>
+          <li><TiLocationArrowOutline size={24} /> Track Your Order</li>
+          <li><IoFastFoodOutline size={24} /> Current Orders</li>
+          <li><CgProfile size={24} /> Profile</li>
+          <li><IoNotificationsSharp size={24} /> Notifications</li>
+          <li><RiFeedbackLine size={24} /> Feedback</li>
+          <li>
+            <button
+              onClick={() => setOpenLogoutConfirm(true)}
+              className="user-os-logout-btn"
+            >
+              Logout
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div className="os-header-right">
+        <button className="os-menu-toggle" onClick={toggleMenu}>
+          {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        </button>
+      </div>
+
+      {menuOpen && <div className="os-nav-backdrop" onClick={closeMenu} />}
       {openLogoutConfirm && <LogoutConfirm onClose={() => setOpenLogoutConfirm(false)} />}
     </header>
   );

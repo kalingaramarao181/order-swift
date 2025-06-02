@@ -50,6 +50,43 @@ const Offers = {
       });
     });
   },
+  getOffersByRestaurantId: (restaurantId) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT 
+  o.id AS offer_id,
+  o.offer_type,
+  o.offer_title,
+  o.offer_description,
+  o.discount_type,
+  o.discount_value,
+  o.start_date,
+  o.end_date,
+  o.is_active,
+  GROUP_CONCAT(
+    CONCAT(
+      i.id, '||', 
+      i.name, '||', 
+      i.price, '||', 
+      i.description, '||', 
+      i.image
+    ) SEPARATOR ';;'
+  ) AS item_details
+FROM offers o
+LEFT JOIN offer_items oi ON o.id = oi.offer_id
+LEFT JOIN menu_items i ON oi.item_id = i.id
+WHERE o.restaurant_id = ?
+GROUP BY o.id;
+    `;
+
+    db.query(query, [restaurantId], (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+},
+
+
 };
 
 module.exports = Offers;

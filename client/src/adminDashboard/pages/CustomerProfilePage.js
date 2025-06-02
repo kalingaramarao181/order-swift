@@ -49,7 +49,7 @@ const CustomerProfilePage = ({ customerData }) => {
             <label>Name</label>
             <input
               name="name"
-              value={profile.name}
+              value={profile.fullName}
               disabled={!isEditing}
               onChange={handleChange}
             />

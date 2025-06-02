@@ -35,7 +35,7 @@ const CustomerProfilePage = ({ customerData }) => {
     <div className="customer-profile-container">
       <h2 className="customer-profile-title">👤 My Profile</h2>
 
-      <div className="customer-profile-card">
+      <div className="customer-profile-card"> 
         <div className="customer-profile-photo-section">
           <img
             src="https://i.ibb.co/sbKf3rp/user-avatar.png"
@@ -49,7 +49,7 @@ const CustomerProfilePage = ({ customerData }) => {
             <label>Name</label>
             <input
               name="name"
-              value={profile.name}
+              value={profile.fullName}
               disabled={!isEditing}
               onChange={handleChange}
             />

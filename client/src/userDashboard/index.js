@@ -1,3 +1,4 @@
+import React, { useState, useEffect} from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Header from "../components/header";
 import "../restaurent/styles/HomePage.css";
@@ -5,10 +6,32 @@ import BillingPage from "./pages/BillingPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import TransactionsTable from "./pages/TransactionsPage";
 import CustomerProfilePage from "./pages/CustomerProfilePage";
+import { getCookiesData } from "../utils/cookiesData";
+import { getUserDetails } from "../api/authApi";
 import FeedbackPage from "./pages/FeedbackPage";
 import NotificationsPage from "./pages/NotificationsPage";
+import CustomerHome from "./pages/CustomerHome";
 
 const UserDashboard = () => {
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const fetchUserData = async () => {  
+      try {
+        const cookiesData = getCookiesData();
+        if (cookiesData) {
+          const userId = cookiesData.userId;
+          const response = await getUserDetails(userId);
+          setUserData(response);
+          console.log("User Data:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
   const orders = [
     {
       id: "ORD1024",
@@ -90,105 +113,12 @@ const UserDashboard = () => {
     },
   ];
 
-  const customer = {
-    name: "Majji Kiran",
-    email: "majji@example.com",
-    phone: "9876543210",
-    address: "Plot 45, Hitech City, Hyderabad",
-  };
-
   return (
     <div>
       <Header />
-      <section className="os-welcome-section">
-        <div className="os-welcome-section-header">
-          <div className="os-welcome-section-header-left">
-            <h2 className="os-welcome-title">Welcome</h2>
-            <p className="os-restaurant-name">Ramarao Kalinga</p>
-          </div>
-        </div>
-
-        <div className="os-stats-wrapper">
-          <div className="os-stat-card">
-            🧾 Orders Placed
-            <br />
-            <strong>500</strong>
-          </div>
-          <div className="os-stat-card">
-            💳 Total Spent
-            <br />
-            <strong>$500</strong>
-          </div>
-          <div className="os-stat-card">
-            ⭐ Loyalty Points
-            <br />
-            <strong>200</strong>
-          </div>
-        </div>
-      </section>
-
-      <section className="os-sections-grid">
-        <Link className={`os-section-card-link`} to="/dashboard/c-orders">
-          <div
-            className={`os-section-card ${
-              useLocation().pathname === "/dashboard/c-orders" && "c-active"
-            }`}
-          >
-            🧾 My Orders
-          </div>
-        </Link>
-        <Link className={`os-section-card-link`} to="/dashboard/c-billing">
-          <div
-            className={`os-section-card ${
-              useLocation().pathname === "/dashboard/c-billing" && "c-active"
-            }`}
-          >
-            💰 Billing
-          </div>
-        </Link>
-        <Link className={`os-section-card-link`} to="/dashboard/c-transactions">
-          <div
-            className={`os-section-card ${
-              useLocation().pathname === "/dashboard/c-transactions" &&
-              "c-active"
-            }`}
-          >
-            📄 Transactions
-          </div>
-        </Link>
-        <Link className={`os-section-card-link`} to="/dashboard/c-profile">
-          <div
-            className={`os-section-card ${
-              useLocation().pathname === "/dashboard/c-profile" && "c-active"
-            }`}
-          >
-            👤 Profile
-          </div>
-        </Link>
-        <Link className={`os-section-card-link`} to="/dashboard/c-feedback">
-          <div
-            className={`os-section-card ${
-              useLocation().pathname === "/dashboard/c-feedback" && "c-active"
-            }`}
-          >
-            💬 Feedback
-          </div>
-        </Link>
-        <Link
-          className={`os-section-card-link`}
-          to="/dashboard/c-notifications"
-        >
-          <div
-            className={`os-section-card ${
-              useLocation().pathname === "/dashboard/c-notifications" &&
-              "c-active"
-            }`}
-          >
-            🔔 Notifications
-          </div>
-        </Link>
-      </section>
+      
       <Routes>
+        <Route path="/" element={<CustomerHome />} />
         <Route path="/c-orders" element={<MyOrdersPage orders={orders} />} />
         <Route path="/c-billing" element={<BillingPage bills={bills} />} />
         <Route
@@ -197,7 +127,7 @@ const UserDashboard = () => {
         />
         <Route
           path="/c-profile"
-          element={<CustomerProfilePage customerData={customer} />}
+          element={<CustomerProfilePage customerData={userData} />}
         />
         <Route path="/c-feedback" element={<FeedbackPage />} />
         <Route

@@ -80,7 +80,9 @@ const getUserDetails = async (req, res) => {
       id: user.id,
       fullName: user.name,
       email: user.email,
+      phone: user.phone,
       role: user.role,
+      address: user.location,
     });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });

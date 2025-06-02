@@ -5,6 +5,8 @@ import { MdClose } from "react-icons/md";
 import PasswordUpdate from "../../forms/PasswordUpdateForm";
 import RegisterForm from "../../forms/registerForm";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import LogoutConfirm from "../LogoutConfirm";
 
 const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -12,6 +14,10 @@ const Navbar = () => {
   const [isShowUpdatePasswordForm, setIsShowUpdatePasswordForm] =
     useState(false);
   const [isShowRegisterForm, setIsShowRegisterForm] = useState(false);
+  const [openLogoutConfirm, setOpenLogoutConfirm] = useState(false);
+
+
+  const token = Cookies.get("jwtToken");
 
   const handleLoginClick = (role) => {
     setUserRole(role);
@@ -34,23 +40,47 @@ const Navbar = () => {
   return (
     <header className="swiggy-header">
       <div className="swiggy-logo">
-        <img src="" className="" alt="" /><Link className="header-nav-link" to="/"> OrderSwift</Link>
+        <img src="" className="" alt="" />
+        <Link className="header-nav-link" to="/">
+          {" "}
+          OrderSwift
+        </Link>
       </div>
-      <nav className="swiggy-nav">
-        <a href="#order">Sign in as a</a>
-        <button
-          className="app-button"
-          onClick={() => handleLoginClick("Restaurant")}
-        >
-          Restaurant
-        </button>
-        <button
-          className="sign-in-button"
-          onClick={() => handleLoginClick("Customer")}
-        >
-          Customer
-        </button>
-      </nav>
+      {!token ? (
+        <nav className="swiggy-nav">
+          <a href="#order">Sign in as a</a>
+          <button
+            className="app-button"
+            onClick={() => handleLoginClick("Restaurant")}
+          >
+            Restaurant
+          </button>
+          <button
+            className="sign-in-button"
+            onClick={() => handleLoginClick("Customer")}
+          >
+            Customer
+          </button>
+        </nav>
+      ) : (
+        <nav className="swiggy-nav">
+          <Link className="header-nav-link" to="/dashboard">
+            <button
+              className="app-button"
+              onClick={() => handleLoginClick("Restaurant")}
+            >
+              Dashboard
+            </button>
+          </Link>
+
+          <button
+            className="sign-in-button"
+            onClick={() => setOpenLogoutConfirm(true)}
+          >
+            Logout
+          </button>
+        </nav>
+      )}
 
       {showLogin && (
         <div className="login-popup-overlay">
@@ -104,6 +134,8 @@ const Navbar = () => {
           </div>
         </div>
       )}
+
+      {openLogoutConfirm && <LogoutConfirm onClose={() => setOpenLogoutConfirm(false)} />}
     </header>
   );
 };

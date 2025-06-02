@@ -31,6 +31,8 @@ const RestaurantDetails = () => {
     const fetchData = async () => {
       try {
         const res = await getRestaurantDetails(restaurantId);
+        console.log("Restaurant Details:", res);
+
         setRestaurant(res);
       } catch (error) {
         console.error("Error fetching restaurant:", error);
@@ -55,13 +57,13 @@ const RestaurantDetails = () => {
   const handleOrderClick = (item) => {
     setOrderDetails(item);
     setIsOpenOrderForm(true);
-  }
+  };
 
   const handleBookTableClick = () => {
     const token = Cookies.get("jwtToken");
 
     if (!token) {
-      setShowLoginPrompt(true); 
+      setShowLoginPrompt(true);
       return;
     }
 
@@ -71,6 +73,14 @@ const RestaurantDetails = () => {
   if (!restaurant) {
     return <Loader loadingText="Fetching Restaurant details..." />;
   }
+
+  const origionalPrice = (offer) => {
+    let totalPrice = 0;
+    offer.items.forEach((item) => {
+      totalPrice += parseInt(item.price);
+    });
+    return `₹${totalPrice - offer.discount_value}`;
+  };
 
   return (
     <>
@@ -101,6 +111,66 @@ const RestaurantDetails = () => {
           ))}
         </div>
 
+        <h2 className="order-menu-title">Offers</h2>
+        <div className="offers-container">
+          {restaurant.offers.map((offer) => (
+            <div key={offer.offer_id} className="offer-card">
+              <div className="offer-header">
+                <h2 className="offer-title">{offer.offer_title}</h2>
+                <span className="offer-type">{offer.offer_type}</span>
+              </div>
+              <p className="offer-description"> </p>
+
+              <div className="offer-discount">
+                <strong>Discount: </strong>
+                {offer.discount_type === "FLAT"
+                  ? `₹${offer.discount_value}`
+                  : `${offer.discount_value}%`}
+              </div>
+
+              <div className="offer-discount">
+                <strong>Origional Price: </strong>
+                {origionalPrice(offer)}
+              </div>
+
+              <div className="items-grid">
+                {offer.items.map((item) => (
+                  <div key={item.id} className="item-card">
+                    <div className="image-wrapper">
+                      <img
+                        src={baseUrl + item.image}
+                        alt={item.name}
+                        className="item-image"
+                      />
+                    </div>
+                    <h4 className="item-name">{item.name}</h4>
+                    <p className="item-price">₹{item.price}</p>
+                  </div>
+                ))}
+              </div>
+              <button
+                className="offer-button"
+                onClick={() => handleOrderClick(offer)}
+              >
+                Order Now {origionalPrice(offer)}
+              </button>
+
+              <div className="offer-dates">
+                <small>
+                  Valid from{" "}
+                  <strong>
+                    {new Date(offer.start_date).toLocaleDateString()}
+                  </strong>{" "}
+                  to{" "}
+                  <strong>
+                    {new Date(offer.end_date).toLocaleDateString()}
+                  </strong>
+                </small>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <h2 className="order-menu-title">Menu Items</h2>
         <div className="order-food-items-grid">
           {restaurant.foodItems.map((item, idx) => (
@@ -112,7 +182,12 @@ const RestaurantDetails = () => {
                 {item.discount && (
                   <span className="order-food-discount">{item.discount}</span>
                 )}
-                <button className="order-food-button" onClick={() => handleOrderClick(item)}>Order Now</button>
+                <button
+                  className="order-food-button"
+                  onClick={() => handleOrderClick(item)}
+                >
+                  Order Now
+                </button>
               </div>
             </div>
           ))}
@@ -139,7 +214,6 @@ const RestaurantDetails = () => {
           </div>
         </div>
       )}
-
 
       {isOpenOrderForm && (
         <div className="login-popup-overlay">

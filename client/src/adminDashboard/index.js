@@ -81,14 +81,6 @@ const notifications = [
     read: true,
   },
 ];
-
-
-const customer = {
-  name: "Majji Kiran",
-  email: "majji@example.com",
-  phone: "9876543210",
-  address: "Plot 45, Hitech City, Hyderabad"
-};
   
   return (
     <div>
@@ -107,7 +99,7 @@ const customer = {
             <br />
             <strong>42</strong>
           </div>
-          <div className="os-stat-card">choosava that is Ramarao
+          <div className="os-stat-card">
             👤 Total Users
             <br />
             <strong>3,240</strong>
@@ -165,7 +157,7 @@ const customer = {
         <Route path="/a-orders" element={<MyOrdersPage orders={orders} />} />
         <Route path="/a-restaurants" element={<RestaurantsPage restaurants={restaurants} />} />
         <Route path="/a-users" element={<UsersPage users={users} />} />
-        <Route path="/a-profile" element={<CustomerProfilePage customerData={customer} />} />
+        <Route path="/a-profile" element={<CustomerProfilePage customerData={userData} />} />
         <Route path="/a-feedback" element={<FeedbackPage />} />
         <Route path="/a-notifications" element={<NotificationsPage notifications={notifications} />} />
       </Routes>

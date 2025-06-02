@@ -1,4 +1,5 @@
 const Menu = require('../models/menuItemModel');
+const Offers = require('../models/offerModel');
 const Restaurant = require('../models/restaurantModel');
 const Tables = require('../models/tableModel');
 
@@ -130,30 +131,46 @@ const getRestaurantDetails = async (req, res) => {
     if (!restaurant) return res.status(404).json({ message: "Restaurant not found" });
 
     const images = await Restaurant.getRestaurantImagesById(restaurantId);
-    const foodItems = await Menu.getMenuItemById(restaurantId);
-    const tables = await Tables.getTablesByRestaurantId(restaurantId);
+const foodItems = await Menu.getMenuItemById(restaurantId);
+const tables = await Tables.getTablesByRestaurantId(restaurantId);
+const offers = await Offers.getOffersByRestaurantId(restaurantId); // lowercase 'offers'
 
-    res.status(200).json({
-      name: restaurant[0].name,
-      restaurantId: restaurant[0].id,
-      logo: restaurant[0].image_url,
-      description: restaurant[0].description,
-      images: images.map((img) => img.image_url),
-      tables: tables.map((table) => ({
-        tableNumber: table.table_number,
-        seats: table.seats,
-        isAvailable: table.is_available,
-        tableId: table.id,
-      })),
-      foodItems: foodItems.map((item) => ({
-        id: item.id,
-        restaurantId: item.restaurant_id,
-        name: item.name,
-        price: item.price,
-        description: item.description,
-        image: item.image,
-      })),
+const formattedOffers = offers.map(offer => {
+  let items = [];
+  if (offer.item_details) {
+    items = offer.item_details.split(';;').map(itemStr => {
+      const [id, name, price, description, image] = itemStr.split('||');
+      return { id, name, price, description, image };
     });
+  }
+  return {
+    ...offer,
+    items,
+  };
+});
+
+res.status(200).json({
+  name: restaurant[0].name,
+  restaurantId: restaurant[0].id,
+  logo: restaurant[0].image_url,
+  description: restaurant[0].description,
+  images: images.map((img) => img.image_url),
+  tables: tables.map((table) => ({
+    tableNumber: table.table_number,
+    seats: table.seats,
+    isAvailable: table.is_available,
+    tableId: table.id,
+  })),
+  foodItems: foodItems.map((item) => ({
+    id: item.id,
+    restaurantId: item.restaurant_id,
+    name: item.name,
+    price: item.price,
+    description: item.description,
+    image: item.image,
+  })),
+  offers: formattedOffers,
+});
   } catch (error) {
     console.error("Error in getRestaurantDetails:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -173,8 +190,6 @@ const getRestaurantProfileById = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
-
-
 
 
 

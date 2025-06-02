@@ -7,7 +7,6 @@ import Restaurants from '../../components/restaurants';
 
 const Home = () => {
 
-    
     return (
         <div>
             <Navbar />
