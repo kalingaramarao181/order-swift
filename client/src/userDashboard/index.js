@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import Header from "../components/header";
 import "../restaurent/styles/HomePage.css";
 import BillingPage from "./pages/BillingPage";
@@ -11,12 +11,13 @@ import { getUserDetails } from "../api/authApi";
 import FeedbackPage from "./pages/FeedbackPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import CustomerHome from "./pages/CustomerHome";
+import OrderStatusPage from "./pages/OrderStatusPage";
 
 const UserDashboard = () => {
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    const fetchUserData = async () => {  
+    const fetchUserData = async () => {
       try {
         const cookiesData = getCookiesData();
         if (cookiesData) {
@@ -29,7 +30,7 @@ const UserDashboard = () => {
         console.error("Error fetching user data:", error);
       }
     };
-  
+
     fetchUserData();
   }, []);
   const orders = [
@@ -69,6 +70,20 @@ const UserDashboard = () => {
       status: "Failed",
     },
   ];
+
+  const orderDetails ={
+  item: "Paneer Biryani",
+  totalPrice: "₹320",
+  address: "D/O:39-19-13, Madhavadhara, Visakhapatnam - 530007",
+  restaurant: "Spice Garden",
+  paymentMode: "Online",
+  estimatedTime: 10, 
+  orderTime: "2025-06-03T22:03:08.587Z"
+  // new Date().toISOString() 
+};
+
+console.log("Order Details:", orderDetails.orderTime);
+
 
   const notifications = [
     {
@@ -116,25 +131,16 @@ const UserDashboard = () => {
   return (
     <div>
       <Header />
-      
       <Routes>
         <Route path="/" element={<CustomerHome />} />
-        <Route path="/c-orders" element={<MyOrdersPage orders={orders} />} />
-        <Route path="/c-billing" element={<BillingPage bills={bills} />} />
-        <Route
-          path="/c-transactions"
-          element={<TransactionsTable transactions={transactions} />}
-        />
-        <Route
-          path="/c-profile"
-          element={<CustomerProfilePage customerData={userData} />}
-        />
         <Route path="/c-feedback" element={<FeedbackPage />} />
-        <Route
-          path="/c-notifications"
-          element={<NotificationsPage notifications={notifications} />}
-        />
-      </Routes>
+        <Route path="/c-billing" element={<BillingPage bills={bills} />} />
+        <Route path="/c-orders" element={<MyOrdersPage orders={orders} />} />
+        <Route path="/c-profile" element={<CustomerProfilePage customerData={userData} />} />
+        <Route path="/c-transactions" element={<TransactionsTable transactions={transactions} />} />
+        <Route path="/c-notifications" element={<NotificationsPage notifications={notifications} />} />
+        <Route path="/c-status" element={<OrderStatusPage status={"delivered"} order={orderDetails} />} />
+      </Routes> 
     </div>
   );
 };

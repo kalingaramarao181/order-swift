@@ -115,7 +115,7 @@ const Header = () => {
         </div>
 
         <ul className={`os-user-info ${showDropdown ? "dropdown-show" : ""}`}>
-          <li><TiLocationArrowOutline size={24} /> Track Your Order</li>
+          <li><TiLocationArrowOutline size={24} /> <Link className="user-os-nav-link" to="/dashboard/c-status"> Track Your Order</Link></li>
           <li><IoFastFoodOutline size={24} /> Current Orders</li>
           <li><CgProfile size={24} /> Profile</li>
           <li><IoNotificationsSharp size={24} /> Notifications</li>

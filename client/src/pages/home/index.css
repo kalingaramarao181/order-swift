@@ -1,6 +1,8 @@
 .swiggy-container {
     font-family: 'Arial', sans-serif;
-    background-color: #fc8019;
+  background-image: linear-gradient(to right,#f7440e, #da5bf3);
+
+    /* background-color: #fc8019; */
     color: #fff;
     padding: 20px;
 }

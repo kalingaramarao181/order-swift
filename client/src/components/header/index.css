@@ -3,7 +3,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ff6b00;
+  background-image: linear-gradient(to right,#f7440e, #d72bfa);
+  /* background-color: #ff6b00; */
   padding: 0.75rem 1rem;
   position: relative;
   z-index: 100;
@@ -15,6 +16,11 @@
   font-size: 1.5rem;
   text-decoration: none;
   font-weight: bold;
+}
+
+.user-os-nav-link{
+  text-decoration: none;
+  color: rgb(65, 62, 62);
 }
 
 .os-header-right {
@@ -176,7 +182,7 @@
     padding: auto;
     padding-top: 8px;
     padding-bottom: 8px;
-    background-color: #fa8430;
+    background-color: #f37048;
   }
 
   .order-nav-item.active {
@@ -184,7 +190,7 @@
     padding: auto;
     padding-top: 8px;
     padding-bottom: 8px;
-    background-color: #fa8430;
+    background-color: #f37048;
     border-radius: 4px;
     font-weight: bold;  
   }

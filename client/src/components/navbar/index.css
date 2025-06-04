@@ -2,7 +2,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #fc8019;
+  background-image: linear-gradient(to right,#f7440e, #dc4ff8);
+
+    /* background-color: #fc8019; */
     padding: 10px 20px;
     color: white;
 }
@@ -94,6 +96,10 @@
   .keep-signing-in{
     margin-top: 16px !important;
   }
+  .header-nav-link{
+    text-decoration: none;
+    color: white;
+  }
 
   @media (max-width: 768px) {
   .swiggy-header {
@@ -164,5 +170,7 @@
     align-self: flex-end;
     position: fixed;
     top: 2px;
+    text-decoration: none;
+    color: white;
   }
 }
