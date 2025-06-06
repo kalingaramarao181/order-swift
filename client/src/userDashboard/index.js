@@ -12,9 +12,11 @@ import FeedbackPage from "./pages/FeedbackPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import CustomerHome from "./pages/CustomerHome";
 import OrderStatusPage from "./pages/OrderStatusPage";
+import { getOrderDetailsByOrderId } from "../api/orderApi";
 
 const UserDashboard = () => {
   const [userData, setUserData] = useState({});
+  const [orderDetails, setOrderDetails] = useState({});
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -23,8 +25,11 @@ const UserDashboard = () => {
         if (cookiesData) {
           const userId = cookiesData.userId;
           const response = await getUserDetails(userId);
+          const order = await getOrderDetailsByOrderId(8);
           setUserData(response);
-          console.log("User Data:", response);
+          setOrderDetails(order);
+          console.log("Order Details:", order);
+          
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -70,19 +75,6 @@ const UserDashboard = () => {
       status: "Failed",
     },
   ];
-
-  const orderDetails ={
-  item: "Paneer Biryani",
-  totalPrice: "₹320",
-  address: "D/O:39-19-13, Madhavadhara, Visakhapatnam - 530007",
-  restaurant: "Spice Garden",
-  paymentMode: "Online",
-  estimatedTime: 10, 
-  orderTime: "2025-06-03T22:03:08.587Z"
-  // new Date().toISOString() 
-};
-
-console.log("Order Details:", orderDetails.orderTime);
 
 
   const notifications = [
@@ -139,7 +131,7 @@ console.log("Order Details:", orderDetails.orderTime);
         <Route path="/c-profile" element={<CustomerProfilePage customerData={userData} />} />
         <Route path="/c-transactions" element={<TransactionsTable transactions={transactions} />} />
         <Route path="/c-notifications" element={<NotificationsPage notifications={notifications} />} />
-        <Route path="/c-status" element={<OrderStatusPage status={"delivered"} order={orderDetails} />} />
+        <Route path="/c-status" element={<OrderStatusPage order={orderDetails} />} />
       </Routes> 
     </div>
   );

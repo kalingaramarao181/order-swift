@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import "../styles/OrderStatusPage.css";
 
-const OrderStatusPage = ({ status, order }) => {
+const OrderStatusPage = ({ order }) => {
   const [remainingTime, setRemainingTime] = useState(0);
+  const [statusOverride, setStatusOverride] = useState(null); // Optional override after timer ends
 
   useEffect(() => {
-    const estimatedTimeMs = (order.estimatedTime || 10) * 60 * 1000; // default 10 min
-    const bookingTime = new Date(order.orderTime).getTime(); // orderTime must be in ISO format
-    const targetTime = bookingTime + estimatedTimeMs;
+    if (order.status !== "preparing") return;
+
+    const targetTime = new Date(order.updated_at).getTime(); 
 
     const updateRemainingTime = () => {
       const now = new Date().getTime();
       const timeLeft = Math.max(Math.floor((targetTime - now) / 1000), 0);
       setRemainingTime(timeLeft);
+
+      if (timeLeft <= 0) {
+        setStatusOverride("ready");
+      }
     };
 
-    updateRemainingTime(); // initialize immediately
-
+    updateRemainingTime(); // Initial call
     const timer = setInterval(updateRemainingTime, 1000);
 
     return () => clearInterval(timer);
-  }, [order.orderTime, order.estimatedTime]);
+  }, [order.updated_at, order.status]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -28,20 +32,22 @@ const OrderStatusPage = ({ status, order }) => {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const effectiveStatus = statusOverride || order.status;
+
   return (
     <div className="order-status-page-container">
       <div className="order-status-order-details">
         <h3>Order Summary</h3>
         <p>
-          Your order for <strong>{order.item}</strong> costing{" "}
-          <strong>{order.totalPrice}</strong> has been received by{" "}
-          <strong>{order.restaurant}</strong>. It will be delivered to{" "}
-          <strong>{order.address}</strong>. The payment was made via{" "}
-          <strong>{order.paymentMode}</strong>.
+          Your order for <strong>{order.food_name}</strong> costing{" "}
+          <strong>{order.total_amount}</strong> has been received by{" "}
+          <strong>{order.restaurant_name}</strong>. It will be delivered to{" "}
+          <strong>{order.special_request}</strong>. The payment was made via{" "}
+          <strong>Online</strong>.
         </p>
       </div>
 
-      {status === "preparing" ? (
+      {effectiveStatus === "preparing" ? (
         <div className="order-status-preparing-section">
           <img
             src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExanoxcjIwZ2FsYXlhMGt6a21pdmZlcWMzc3QzYTYxaWNzaHg4cTZvaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gg8Q0J4HD2rFm5LTHe/giphy.gif"
@@ -56,7 +62,7 @@ const OrderStatusPage = ({ status, order }) => {
             ⏳ Your order will be ready in {formatTime(remainingTime)}
           </p>
         </div>
-      ) : status === "ready" ? (
+      ) : effectiveStatus === "ready" ? (
         <div className="order-status-general-section">
           <img
             src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWMybDZ2bnJnNnJueWJhbmRrMTltenFmY283MmtrcmR6Z2xjcHoxNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7aD0mhLDPeW8tfig/giphy.gif"
@@ -68,7 +74,7 @@ const OrderStatusPage = ({ status, order }) => {
             Your food is ready for pickup or delivery!
           </p>
         </div>
-      ) : status === "delivered" ? (
+      ) : effectiveStatus === "delivered" ? (
         <div className="order-status-general-section">
           <img
             src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnhvZTFiNDI4c2h2ZW9zN2NlZGcxZWIyamhqdHk2Z3hoYjVrZm5nNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3q2FnW3yZRJVZH2g/giphy.gif"
@@ -83,9 +89,9 @@ const OrderStatusPage = ({ status, order }) => {
         </div>
       ) : (
         <div className="order-status-general-section">
-          <h2 className="order-status-heading">Status Unknown</h2>
+          <h2 className="order-status-heading">Waiting For Confirmation</h2>
           <p className="order-status-message">
-            Please check back later or contact support.
+            Your order is being processed. Please wait for confirmation from the restaurant.
           </p>
         </div>
       )}

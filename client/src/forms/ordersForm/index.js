@@ -103,7 +103,7 @@ const OrderForm = ({ onClose, orderDetails, userId }) => {
         </div>
 
         <div className="order-profile-info">
-          <label>Special Request</label>
+          <label>Address</label>
           <textarea
             rows="3"
             placeholder="Any preferences or notes?"

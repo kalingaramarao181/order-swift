@@ -39,3 +39,29 @@ export const createOrder = async (orderData) => {
     throw error;
   }
 };
+
+export const updateOrderStatus = async (orderId, orderData) => {
+  try {
+    const response = await axiosInstance.put(`/orders/status/${orderId}`, orderData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating order status", error);
+    throw error;
+  }
+}
+
+export const getOrderDetailsByOrderId = async (orderId) => {
+  try {
+    const response = await axiosInstance.get(`/orders/order-details/${orderId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching order details by order ID", error);
+    throw error;
+  }
+}
+
+export const fetchOrderStatus = async (orderId) => {
+  const response = await fetch(`/orders/status/${orderId}`);
+  if (!response.ok) throw new Error("Failed to fetch order");
+  return await response.json();
+};

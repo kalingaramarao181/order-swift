@@ -75,6 +75,44 @@ const Orders = {
         });
     },
 
+    updateOrderStatus: (orderId, status, updatedEstimatedTime) => {
+        return new Promise((resolve, reject) => {
+            db.query("UPDATE orders SET status = ?, updated_at = ? WHERE id = ?", [status, updatedEstimatedTime, orderId], (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
+        });
+    },
+
+    getOrderDetailsByOrderId: (orderId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`
+                SELECT 
+                    orders.*, 
+                    users.name AS user_name, 
+                    restaurants.name AS restaurant_name, 
+                    menu_items.name AS food_name 
+                FROM orders
+                JOIN users ON orders.user_id = users.id
+                JOIN restaurants ON orders.restaurant_id = restaurants.id
+                JOIN menu_items ON orders.food_item_id = menu_items.id
+                WHERE orders.id = ?
+            `, [orderId], (err, result) => {
+                if (err) reject(err);
+                else resolve(result[0]); 
+            });
+        });
+    },
+
+    getOrderStatusByOrderId: (orderId) => {
+        return new Promise((resolve, reject) => {
+            db.query("SELECT status FROM orders WHERE id = ?", [orderId], (err, result) => {
+                if (err) reject(err);
+                else resolve(result[0]); // Return single order status
+            });
+        });
+    },
+
     getOrdersByRestaurantId: (restaurant_id) => {
         return new Promise((resolve, reject) => {
             db.query(`

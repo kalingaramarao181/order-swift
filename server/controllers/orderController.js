@@ -89,6 +89,39 @@ const updateOrder = async (req, res) => {
   }
 };
 
+
+const updateOrderStatus = async (req, res) => {
+  const { orderId } = req.params;
+  const { status, estimatedTime } = req.body;
+  const currentTime = new Date();
+  const updatedEstimatedTime = new Date(currentTime.getTime() + estimatedTime * 60000);
+
+  try {
+    const updatedOrder = await Orders.updateOrderStatus(orderId, status, updatedEstimatedTime);
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getOrderDetailsByOrderId = async (req, res) => {
+  const { orderId } = req.params;
+  try {
+    const orderDetails = await Orders.getOrderDetailsByOrderId(orderId);
+    if (!orderDetails) {
+      return res.status(404).json({ message: "Order details not found" });
+    }
+    res.status(200).json(orderDetails);
+  } catch (error) {
+    console.error("Error fetching order details by order ID:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const deleteOrder = async (req, res) => {
   const { orderId } = req.params;
   try {
@@ -99,6 +132,23 @@ const deleteOrder = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+const getOrderStatusByOrderId = () => {
+  return async (req, res) => {
+    const { orderId } = req.params;
+    try {
+      const orderStatus = await Orders.getOrderStatusByOrderId(orderId);
+      if (!orderStatus) {
+        return res.status(404).json({ message: "Order status not found" });
+      }
+      res.status(200).json(orderStatus);
+    } catch (error) {
+      console.error("Error fetching order status by order ID:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+}
 
 const getOrdersByUserId = async (req, res) => {
   const { userId } = req.params;
@@ -119,8 +169,11 @@ module.exports = {
   getOrderById,
   createOrder,
   updateOrder,
+  updateOrderStatus,
+  getOrderDetailsByOrderId,
   deleteOrder,
   getOrdersByUserId,
+  getOrderStatusByOrderId ,
   getOrdersByRestaurantId,
   getOrdersByCustomerId
 };
